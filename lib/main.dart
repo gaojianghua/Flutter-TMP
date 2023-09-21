@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 10:53:47
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-21 17:01:48
+ * @LastEditTime: 2023-09-21 17:18:28
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -11,6 +11,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_nb_net/flutter_net.dart';
+import 'config/custom_interceptors.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,8 @@ void main() {
       //   })
       // cookie
       .addInterceptor(CookieManager(CookieJar()))
+      // 自定义拦截器
+      .addInterceptor(CustomInterceptors())
       // dio_http_cache
       // .addInterceptor(DioCacheManager(CacheConfig(
       //   baseUrl: "https://www.wanandroid.com/",

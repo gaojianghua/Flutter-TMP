@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-21 16:36:24
+ * @LastEditTime: 2023-09-21 17:24:41
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -25,7 +25,6 @@ class HomePage extends StatelessWidget {
   void getHttp() async {
     var appResponse = await post("/user/public/key");
     appResponse.when(success: (dynamic) {
-      // var size = model.data?.length;
       debugPrint("成功返回$dynamic");
     }, failure: (String msg, int code) {
       debugPrint("失败了：msg=$msg/code=$code");
