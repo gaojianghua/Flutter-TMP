@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-22 17:02:53
+ * @LastEditTime: 2023-09-22 17:37:08
  * @Description: file content
  */
 import 'package:dio/dio.dart';
@@ -23,6 +23,9 @@ class _HomePageState extends State<HomePage> {
     SystemApi systemApi = SystemApi();
     
     Response response = await systemApi.getPublicKey();
+    setState(() {
+      _public = response.data['data']['server_public_key'];
+    });
     print('User: ${response.data}');
   }
 

@@ -6,8 +6,10 @@
  * @Description: file content
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'config/request/index.dart';
 import 'pages/index_page.dart';
+import 'store/system_store.dart';
 
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +29,10 @@ class MyApp extends StatelessWidget {// 在这里添加netOptions变量的声明
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: const IndexPage(),
+      home: BlocProvider(
+        create: (_)=> SystemStore(),
+        child: const IndexPage()
+      )
     );
   }
 }
