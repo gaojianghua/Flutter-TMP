@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:03:34
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-21 14:18:17
+ * @LastEditTime: 2023-09-22 10:10:48
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -62,7 +62,6 @@ class _IndexPageState extends State<IndexPage> {
       backgroundColor: const Color.fromRGBO(240, 240, 240, 1),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.pink,
         currentIndex: currentIndex,
         items: bottomTabs,
         onTap: (index){

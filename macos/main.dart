@@ -2,14 +2,14 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 10:53:47
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-22 15:16:19
+ * @LastEditTime: 2023-09-22 09:53:44
  * @Description: file content
  */
 import 'package:flutter/material.dart';
-import 'config/request/index.dart';
-import 'pages/index_page.dart';
+import 'package:flutter_shop/config/request/index.dart';
+import '../lib/pages/index_page.dart';
 
-void main(){
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   CustomDio();
   runApp(MyApp());
