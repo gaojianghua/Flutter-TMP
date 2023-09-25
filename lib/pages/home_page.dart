@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     getPublicKey();
     super.initState();
-    
   }
 
   @override

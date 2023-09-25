@@ -17,9 +17,8 @@ void main(){
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {// 在这里添加netOptions变量的声明
-
-  const MyApp({Key? key}) : super(key: key); // 修改构造函数
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
