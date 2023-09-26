@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:03:34
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-25 17:24:24
+ * @LastEditTime: 2023-09-26 09:49:08
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -57,7 +57,7 @@ class _IndexPageState extends State<IndexPage> {
     const HomePage(),
     const CategoryPage(),
     const MessagePage(),
-    const CartPage(),
+    CartPage(),
     const MyPage(),
   ];
 
@@ -67,7 +67,7 @@ class _IndexPageState extends State<IndexPage> {
       backgroundColor: const Color.fromRGBO(240, 240, 240, 1),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Color(0xffeeeeee),
-        type: BottomNavigationBarType.fixed,  //如果底部有4个或者4个以上的菜单的时候就需要配置这个参数
+        type: BottomNavigationBarType.fixed, //如果底部有4个或者4个以上的菜单的时候就需要配置这个参数
         currentIndex: currentIndex,
         items: bottomTabs,
         onTap: (index) {
@@ -97,6 +97,52 @@ class _IndexPageState extends State<IndexPage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      drawer: Drawer(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: UserAccountsDrawerHeader(
+                      accountName: const Text("Oh Shit"),
+                      accountEmail: const Text("shit@qq.com"),
+                      otherAccountsPictures: [
+                        Image.network(
+                            "https://www.itying.com/images/flutter/1.png"),
+                        Image.network(
+                            "https://www.itying.com/images/flutter/2.png"),
+                        Image.network(
+                            "https://www.itying.com/images/flutter/3.png"),
+                      ],
+                      currentAccountPicture: const CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              "https://www.itying.com/images/flutter/3.png")),
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                  "https://www.itying.com/images/flutter/2.png"))),
+                    ))
+              ],
+            ),
+            const ListTile(
+              leading: CircleAvatar(
+                child: Icon(Icons.people),
+              ),
+              title: Text("个人中心"),
+            ),
+            const Divider(),
+            const ListTile(
+              leading: CircleAvatar(
+                child: Icon(Icons.settings),
+              ),
+              title: Text("系统设置"),
+            ),
+            const Divider(),
+          ],
+        ),
+      ),
     );
   }
 }
