@@ -2,16 +2,16 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-07 17:59:52
+ * @LastEditTime: 2023-10-07 18:01:24
  * @Description: file content
  */
 // import 'package:dio/dio.dart';
 // import 'package:flutter_shop/config/request/api/system.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import '../../models/card_model.dart';
-import '../../components/card_item.dart';
+// import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+// import '../../models/card_model.dart';
+// import '../../components/card_item.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,14 +23,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-const images = <String>[
-  'images/banner.jpeg',
-  'images/banner.jpeg',
-  'images/banner.jpeg',
-];
-
 class _HomePageState extends State<HomePage> {
-  List? cardList;
 
   //获取轮播图
   getHomePageContent() async {
