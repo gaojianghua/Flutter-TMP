@@ -1,0 +1,54 @@
+{
+    "code": 200,
+    "data": {
+        "slides": [
+            "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
+            "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
+            "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg"
+        ],
+        "menus": [
+            {
+                "name": "乐器音乐",
+                "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/menu1.png"
+            },
+            {
+                "name": "舞蹈",
+                "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/menu2.png"
+            },
+            {
+                "name": "科技益智",
+                "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/menu3.png"
+            },
+            {
+                "name": "书法绘画",
+                "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/menu4.png"
+            },
+            {
+                "name": "语言表演",
+                "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/menu5.png"
+            },
+            {
+                "name": "体育竞技",
+                "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/menu6.png"
+            },
+            {
+                "name": "艺考",
+                "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/menu7.png"
+            },
+            {
+                "name": "早教",
+                "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/menu8.png"
+            },
+            {
+                "name": "幼儿园",
+                "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/menu9.png"
+            },
+            {
+                "name": "托管",
+                "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/menu10.png"
+            }
+        ],
+        "advert": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/7c8664135e1c3bc0168e88a47004a21a112f46f11e2a2-MCQCaD_fw658webp.webp"
+    },
+    "msg": "success"
+}
