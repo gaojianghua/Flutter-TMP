@@ -7,7 +7,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/config/request/index.dart';
-import '../lib/pages/index_page.dart';
+import '../lib/pages/tabbar/index_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

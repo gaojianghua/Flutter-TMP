@@ -1,14 +1,14 @@
 /*
  * @Author: 高江华 g598670138@163.com
- * @Date: 2023-09-21 11:25:27
+ * @Date: 2023-10-06 14:00:42
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-26 18:05:25
+ * @LastEditTime: 2023-10-06 14:02:10
  * @Description: file content
  */
 import 'package:flutter/material.dart';
 
-class CartPage extends StatelessWidget {
-  const CartPage({super.key});
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
