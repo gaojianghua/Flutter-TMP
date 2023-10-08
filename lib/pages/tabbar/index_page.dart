@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:03:34
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-26 09:49:08
+ * @LastEditTime: 2023-10-08 14:58:42
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -77,7 +77,10 @@ class _IndexPageState extends State<IndexPage> {
           });
         },
       ),
-      body: currentPage,
+      body: IndexedStack(
+        index: currentIndex,
+        children: pages,
+      ),
       floatingActionButton: Container(
         height: 60,
         width: 60,

@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-07 13:44:47
+ * @LastEditTime: 2023-10-08 15:17:52
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -22,11 +22,11 @@ class _CartPageState extends State<CartPage> {
 
   //获取商品数据
   getSquarePageContent() async {
-    String jsonString = await rootBundle.loadString('data/data.json');
+    String jsonString = await rootBundle.loadString('data/home.json');
     Map<String, dynamic> jsonMap = await json.decode(jsonString);
     setState(() {
       //商品列表
-      cardList = (jsonMap['cards'] as List).cast();
+      cardList = (jsonMap['data']['cards'] as List).cast();
     });
   }
 
@@ -37,12 +37,12 @@ class _CartPageState extends State<CartPage> {
   }
 
   //下拉刷新方法
-  Future<void> _onRefresh() async {
+  Future<void> onRefresh() async {
     print("_onRefresh");
   }
 
   //上拉加载方法
-  Future<void> _onLoadMore() async {
+  Future<void> onLoadMore() async {
     print("_onLoadMore");
   }
 
