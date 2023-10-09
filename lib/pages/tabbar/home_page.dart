@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-08 17:45:28
+ * @LastEditTime: 2023-10-09 11:06:30
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -11,6 +11,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../main_models/launcher/index.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,7 +34,6 @@ class _HomePageState extends State<HomePage>
 
   @override
   void initState() {
-    getSquarePageContent();
     super.initState();
   }
 
@@ -58,22 +58,47 @@ class _HomePageState extends State<HomePage>
             String floorGoodsTitleTwo = data['data']['floorGoodsTitleTwo'];
             List<Map> floorGoodsListTwo =
                 (data['data']['floorGoodsListTwo'] as List).cast();
-            return SingleChildScrollView(
-                child: Column(
-              children: [
-                SwiperDiy(swiperList: swiper),
-                MenuDiy(menuList: menus),
-                LeaderPhone(leaderImage: leaderImage, leaderPhone: leaderPhone),
-                RecommendedGoods(goodsList: goodsList),
-                FloorContent(
-                    floorGoodsList: floorGoodsListOne,
-                    floorGoodsTitle: floorGoodsTitleOne),
-                FloorContent(
-                    floorGoodsList: floorGoodsListTwo,
-                    floorGoodsTitle: floorGoodsTitleTwo),
-                hotGoods()
-              ],
-            ));
+            return EasyRefresh(
+              child: ListView(
+                children: [
+                  SwiperDiy(swiperList: swiper),
+                  MenuDiy(menuList: menus),
+                  LeaderPhone(
+                      leaderImage: leaderImage, leaderPhone: leaderPhone),
+                  RecommendedGoods(goodsList: goodsList),
+                  FloorContent(
+                      floorGoodsList: floorGoodsListOne,
+                      floorGoodsTitle: floorGoodsTitleOne),
+                  FloorContent(
+                      floorGoodsList: floorGoodsListTwo,
+                      floorGoodsTitle: floorGoodsTitleTwo),
+                  hotGoods()
+                ],
+              ),
+              header: const ClassicHeader(),
+              footer: const ClassicFooter(),
+              onLoad: () async {
+                String jsonString =
+                    await rootBundle.loadString('data/home.json');
+                Map<String, dynamic> jsonMap = await json.decode(jsonString);
+                List<Map> newGoodsList =
+                    (jsonMap['data']['cards'] as List).cast();
+                if (flowGoodsList.length != 0) {
+                  Future.delayed(Duration(seconds: 1), () {
+                    setState(() {
+                      flowGoodsList.addAll(newGoodsList);
+                      page++;
+                    });
+                  });
+                } else {
+                  setState(() {
+                    flowGoodsList.addAll(newGoodsList);
+                    page++;
+                  });
+                }
+              },
+              onRefresh: () async {},
+            );
           } else {
             return Center(
               child: Text('加载中...'),
@@ -82,17 +107,6 @@ class _HomePageState extends State<HomePage>
         },
       ),
     );
-  }
-
-  //获取商品数据
-  getSquarePageContent() async {
-    String jsonString = await rootBundle.loadString('data/home.json');
-    Map<String, dynamic> jsonMap = await json.decode(jsonString);
-    List<Map> newGoodsList = (jsonMap['data']['cards'] as List).cast();
-    setState(() {
-      flowGoodsList.addAll(newGoodsList);
-      page++;
-    });
   }
 
   Widget hotTitle = Container(
@@ -232,6 +246,7 @@ class MenuDiy extends StatelessWidget {
       padding: EdgeInsets.all(3.0),
       child: GridView.count(
         crossAxisCount: 5,
+        physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.all(5.0),
         children: menuList.map((item) {
           return _buildMenuItem(context, item);
