@@ -1,7 +1,7 @@
 class CategoryModel {
   late String code;
   late String message;
-  late List<Data> data;
+  late List<CategoryData> data;
 
   CategoryModel({required this.code, required this.message, required this.data});
 
@@ -11,7 +11,7 @@ class CategoryModel {
     if (json['data'] != null) {
       data = [];
       json['data'].forEach((v) {
-        data.add(new Data.fromJson(v));
+        data.add(new CategoryData.fromJson(v));
       });
     }
   }
@@ -25,21 +25,21 @@ class CategoryModel {
   }
 }
 
-class Data {
+class CategoryData {
   late String mallCategoryId;
   late String mallCategoryName;
   late List<BxMallSubDto> bxMallSubDto;
   late String? comments;
   late String image;
 
-  Data(
+  CategoryData(
       {required this.mallCategoryId,
       required this.mallCategoryName,
       required this.bxMallSubDto,
       this.comments,
       required this.image});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  CategoryData.fromJson(Map<String, dynamic> json) {
     mallCategoryId = json['mallCategoryId'];
     mallCategoryName = json['mallCategoryName'];
     if (json['bxMallSubDto'] != null) {

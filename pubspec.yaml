@@ -64,6 +64,8 @@ flutter:
     - images/banner.jpeg
     - data/home.json
     - data/category.json
+    - data/goods.json
+    - data/goods1.json
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
