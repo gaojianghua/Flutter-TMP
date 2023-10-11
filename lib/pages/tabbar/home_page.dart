@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-09 11:06:30
+ * @LastEditTime: 2023-10-11 15:45:24
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -10,6 +10,8 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_shop/pages/common/goods_detail_page.dart';
+import 'package:get/get.dart';
 import '../../main_models/launcher/index.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
@@ -24,6 +26,7 @@ class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   int page = 1;
   List<Map> flowGoodsList = [];
+  late bool isMore = false;
   // 页面缓存
   @override
   bool get wantKeepAlive => true;
@@ -47,7 +50,7 @@ class _HomePageState extends State<HomePage>
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var data = json.decode(snapshot.data.toString());
-            List<String> swiper = (data['data']['slides'] as List).cast();
+            List<Map<String, dynamic>> swiper = (data['data']['slides'] as List).cast();
             List<Map> menus = (data['data']['menus'] as List).cast();
             String leaderImage = data['data']['shopInfo']['leaderImage'];
             String leaderPhone = data['data']['shopInfo']['leaderPhone'];
@@ -78,6 +81,12 @@ class _HomePageState extends State<HomePage>
               header: const ClassicHeader(),
               footer: const ClassicFooter(),
               onLoad: () async {
+                if (isMore) {
+                  return null;
+                }
+                setState(() {
+                  isMore = true;
+                });
                 String jsonString =
                     await rootBundle.loadString('data/home.json');
                 Map<String, dynamic> jsonMap = await json.decode(jsonString);
@@ -96,8 +105,21 @@ class _HomePageState extends State<HomePage>
                     page++;
                   });
                 }
+                setState(() {
+                  isMore = false;
+                });
               },
-              onRefresh: () async {},
+              onRefresh: () async {
+                String jsonString =
+                    await rootBundle.loadString('data/home.json');
+                Map<String, dynamic> jsonMap = await json.decode(jsonString);
+                List<Map> newGoodsList =
+                    (jsonMap['data']['cards'] as List).cast();
+                setState(() {
+                  flowGoodsList = newGoodsList;
+                  page = 1;
+                });
+              },
             );
           } else {
             return Center(
@@ -121,7 +143,7 @@ class _HomePageState extends State<HomePage>
       List<Widget> listWidget = flowGoodsList
           .map((e) {
             return InkWell(
-              onTap: () {},
+              onTap: () => Get.to(() => GoodsDetailPage(goodsId: e['goodsId'],)),
               child: Container(
                 width: ScreenUtil().setWidth(368),
                 color: Colors.white,
@@ -191,7 +213,7 @@ class _HomePageState extends State<HomePage>
 
 // 首页轮播图
 class SwiperDiy extends StatelessWidget {
-  final List<String> swiperList;
+  final List<Map<String, dynamic>> swiperList;
   SwiperDiy({required this.swiperList});
 
   @override
@@ -202,9 +224,12 @@ class SwiperDiy extends StatelessWidget {
       child: Swiper(
         itemBuilder: (context, index) {
           final image = swiperList[index];
-          return Image.network(
-            image,
-            fit: BoxFit.cover,
+          return InkWell(
+            onTap: () => Get.to(() => GoodsDetailPage(goodsId: image['goodsId'],)),
+            child: Image.network(
+              image['url'],
+              fit: BoxFit.cover,
+            )
           );
         },
         indicatorLayout: PageIndicatorLayout.COLOR,
@@ -313,9 +338,8 @@ class RecommendedGoods extends StatelessWidget {
   // 热门商品
   Widget goodsWidget(int i) {
     return InkWell(
-      onTap: () => (),
+      onTap: () => Get.to(() => GoodsDetailPage(goodsId: goodsList[i]['goodsId'],)),
       child: Container(
-        height: ScreenUtil().setHeight(278.5),
         width: ScreenUtil().setWidth(250),
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -353,7 +377,6 @@ class RecommendedGoods extends StatelessWidget {
   // 商品列表
   Widget goodsListWidget() {
     return Container(
-      height: ScreenUtil().setHeight(278.5),
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(width: 1, color: Colors.black12)),
       ),
@@ -370,10 +393,15 @@ class RecommendedGoods extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil().setHeight(328),
+      height: ScreenUtil().setHeight(332),
       margin: EdgeInsets.only(top: 10),
       child: Column(
-        children: [titleWidget(), goodsListWidget()],
+        children: [
+          titleWidget(),
+          Expanded(
+            child: goodsListWidget(),
+          )
+        ],
       ),
     );
   }
@@ -411,7 +439,7 @@ class FloorContent extends StatelessWidget {
     return Container(
       width: ScreenUtil().setWidth(375),
       child: InkWell(
-        onTap: () {},
+        onTap: () => Get.to(() => GoodsDetailPage(goodsId: goods['goodsId'],)),
         child: Image.network(goods['image']),
       ),
     );

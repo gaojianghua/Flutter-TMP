@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:31:00
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-10 18:01:46
+ * @LastEditTime: 2023-10-11 14:21:55
  * @Description: file content
  */
 import 'dart:convert';
@@ -11,6 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter_shop/pages/common/goods_detail_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import '../../models/category_model.dart';
 import '../../store/category_store.dart';
 import '../../models/category_goods_list.dart';
@@ -130,13 +133,16 @@ class _CategoryLevelState extends State<CategoryLevel> {
     //   "page": 1,
     //   "pageSize": 10,
     // };
+    context.read<CategoryGoodsListStore>().setCategoryGoodsList([]);
     String jsonString = await rootBundle
         .loadString(categoryId == '1' ? 'data/goods.json' : 'data/goods1.json');
     Map<String, dynamic> jsonMap = await json.decode(jsonString);
     CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(jsonMap);
+    // ignore: unnecessary_null_comparison
     if (goodsList.data == null) {
       context.read<CategoryGoodsListStore>().setCategoryGoodsList([]);
     } else {
+      context.read<CategoryStore>().resetPage();
       context
           .read<CategoryGoodsListStore>()
           .setCategoryGoodsList(goodsList.data);
@@ -186,8 +192,10 @@ class _CategoryRightTabsState extends State<CategoryRightTabs> {
         child: Text(
           item.mallSubName,
           style: TextStyle(
-              fontSize: ScreenUtil().setSp(44.sp),
-              color: isClick ? Colors.red : Colors.black),
+            fontSize: ScreenUtil().setSp(44.sp),
+            color: isClick ? Colors.red : Colors.black,
+            fontWeight: FontWeight.w600,
+          ),  
         ),
       ),
     );
@@ -200,12 +208,14 @@ class _CategoryRightTabsState extends State<CategoryRightTabs> {
     //   "page": 1,
     //   "pageSize": 10,
     // };
+    context.read<CategoryGoodsListStore>().setCategoryGoodsList([]);
     String jsonString = await rootBundle.loadString(
         state.categorySubId == '2c9f6c94621970a801626a35cb4d0175'
             ? 'data/goods.json'
             : 'data/goods1.json');
     Map<String, dynamic> jsonMap = await json.decode(jsonString);
     CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(jsonMap);
+    // ignore: unnecessary_null_comparison
     if (goodsList.data == null) {
       context.read<CategoryGoodsListStore>().setCategoryGoodsList([]);
     } else {
@@ -224,47 +234,76 @@ class CategoryGoodsList extends StatefulWidget {
 }
 
 class _CategoryGoodsListState extends State<CategoryGoodsList> {
-  var scrollController = new ScrollController();
+  ScrollController scrollController = new ScrollController();
+
+  bool isMore = false;
+
+  @override
+  void dispose() {
+    //为了避免内存泄露，需要调用scrollController.dispose
+    scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryGoodsListStore, List<GoodsData>>(
         builder: (context, list) {
       return BlocBuilder<CategoryStore, MyState>(builder: (context, state) {
-        try {
-          if (state.page == 1) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              scrollController.jumpTo(0.0);
-            });
-          }
-        } catch (e) {}
-        if (list.length > 0) {
-          return Expanded(
-              child: Container(
-                  width: ScreenUtil().setWidth(570),
-                  child: EasyRefresh(
-                    child: ListView.builder(
-                      controller: scrollController,
-                      itemCount: list.length,
-                      itemBuilder: (context, index) {
-                        return listItem(list, index);
-                      },
-                    ),
-                    header: const ClassicHeader(),
-                    footer: ClassicFooter(
-                      noMoreText: state.noMoreText,
-                    ),
-                    onLoad: () {
-                      getMoreGoodsList(state);
-                      print(list);
-                    },
-                    onRefresh: () async {},
-                  )));
-        } else {
-          return Center(child: Text('暂无商品'));
-        }
+        return goodsList(list, state);
       });
     });
+  }
+
+  Widget goodsList(list, state) {
+    if (list.length > 0) {
+      if (state.page == 1) {
+        Future.delayed(Duration(milliseconds: 500), () {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (scrollController.hasClients) {
+              scrollController.jumpTo(0.0);
+            }
+          });
+        });
+      }
+      return Expanded(
+          child: Container(
+              width: ScreenUtil().setWidth(570),
+              child: EasyRefresh(
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    return listItem(list, index);
+                  },
+                ),
+                header: const ClassicHeader(),
+                footer: ClassicFooter(
+                  noMoreText: state.noMoreText,
+                ),
+                onLoad: () async {
+                  if (isMore) {
+                    return null;
+                  }
+                  setState(() {
+                    isMore = true;
+                  });
+                  Future.delayed(Duration(seconds: 2), () {
+                    getMoreGoodsList(state);
+                    print(2);
+                  });
+                  setState(() {
+                    isMore = false;
+                  });
+                },
+                onRefresh: () async {
+                  getGoodsList(state.categoryId);
+                  print(1);
+                },
+              )));
+    } else {
+      return Center(child: Text('暂无商品'));
+    }
   }
 
   Widget goodsIamge(List<GoodsData> list, int i) {
@@ -323,7 +362,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
 
   Widget listItem(List<GoodsData> list, int i) {
     return InkWell(
-      onTap: () {},
+      onTap: () => Get.to(() => GoodsDetailPage(goodsId: list[i].goodsId,)),
       child: Container(
         padding: EdgeInsets.only(top: 5, bottom: 5),
         decoration: BoxDecoration(
@@ -343,8 +382,30 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
     );
   }
 
+  void getGoodsList([String? categoryId]) async {
+    // var data = {
+    //   "categoryId": categoryId == null ? '4' : categoryId,
+    //   "categorySubId": "",
+    //   "page": 1,
+    //   "pageSize": 10,
+    // };
+    String jsonString = await rootBundle
+        .loadString(categoryId == '1' ? 'data/goods.json' : 'data/goods1.json');
+    Map<String, dynamic> jsonMap = await json.decode(jsonString);
+    CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(jsonMap);
+    // ignore: unnecessary_null_comparison
+    if (goodsList.data == null) {
+      context.read<CategoryGoodsListStore>().setCategoryGoodsList([]);
+    } else {
+      context.read<CategoryStore>().resetPage();
+      context
+          .read<CategoryGoodsListStore>()
+          .setCategoryGoodsList(goodsList.data);
+    }
+  }
+
   void getMoreGoodsList(MyState state) async {
-    // context.read<CategoryStore>().addPage()
+    context.read<CategoryStore>().addPage();
     // var data = {
     //   "categoryId": state.categoryId,
     //   "categorySubId": state.categorySubId,
@@ -357,7 +418,16 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
             : 'data/goods1.json');
     Map<String, dynamic> jsonMap = await json.decode(jsonString);
     CategoryGoodsListModel goodsList = CategoryGoodsListModel.fromJson(jsonMap);
+    // ignore: unnecessary_null_comparison
     if (goodsList.data == null) {
+      Fluttertoast.showToast(
+        msg: '没有更多了',
+        gravity: ToastGravity.CENTER,
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       context.read<CategoryStore>().changeNoMoreText('没有更多了');
     } else {
       context.read<CategoryGoodsListStore>().setMoreGoodsList(goodsList.data);

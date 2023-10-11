@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-09 17:03:30
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-10 16:38:08
+ * @LastEditTime: 2023-10-11 11:46:06
  * @Description: file content
  */
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -85,6 +85,23 @@ class CategoryStore extends Cubit<MyState> {
         noMoreText: ''
       )
     );
+  }
+
+  resetPage() {
+    emit(
+      MyState(
+        list: state.list,
+        childIndex: state.childIndex,
+        categoryId: state.categoryId,
+        categorySubId: state.categorySubId,
+        page: 1,
+        noMoreText: ''
+      )
+    );
+  }
+
+  getPage() {
+    return state.page;
   }
 
   changeNoMoreText(String text) {
