@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-11 15:45:24
+ * @LastEditTime: 2023-10-11 17:34:29
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   int page = 1;
   List<Map> flowGoodsList = [];
-  late bool isMore = false;
+  late EasyRefreshController _controller;
   // 页面缓存
   @override
   bool get wantKeepAlive => true;
@@ -38,6 +38,16 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
+    _controller = EasyRefreshController(
+      controlFinishRefresh: true,
+      controlFinishLoad: true,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,7 +60,8 @@ class _HomePageState extends State<HomePage>
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var data = json.decode(snapshot.data.toString());
-            List<Map<String, dynamic>> swiper = (data['data']['slides'] as List).cast();
+            List<Map<String, dynamic>> swiper =
+                (data['data']['slides'] as List).cast();
             List<Map> menus = (data['data']['menus'] as List).cast();
             String leaderImage = data['data']['shopInfo']['leaderImage'];
             String leaderPhone = data['data']['shopInfo']['leaderPhone'];
@@ -62,6 +73,7 @@ class _HomePageState extends State<HomePage>
             List<Map> floorGoodsListTwo =
                 (data['data']['floorGoodsListTwo'] as List).cast();
             return EasyRefresh(
+              controller: _controller,
               child: ListView(
                 children: [
                   SwiperDiy(swiperList: swiper),
@@ -81,35 +93,34 @@ class _HomePageState extends State<HomePage>
               header: const ClassicHeader(),
               footer: const ClassicFooter(),
               onLoad: () async {
-                if (isMore) {
-                  return null;
+                await Future.delayed(const Duration(seconds: 2));
+                if (!mounted) {
+                  return;
                 }
-                setState(() {
-                  isMore = true;
-                });
                 String jsonString =
                     await rootBundle.loadString('data/home.json');
                 Map<String, dynamic> jsonMap = await json.decode(jsonString);
                 List<Map> newGoodsList =
                     (jsonMap['data']['cards'] as List).cast();
                 if (flowGoodsList.length != 0) {
-                  Future.delayed(Duration(seconds: 1), () {
-                    setState(() {
-                      flowGoodsList.addAll(newGoodsList);
-                      page++;
-                    });
-                  });
-                } else {
                   setState(() {
                     flowGoodsList.addAll(newGoodsList);
                     page++;
                   });
+                } else {
+                  setState(() {
+                    flowGoodsList = newGoodsList;
+                    page = 1;
+                  });
                 }
-                setState(() {
-                  isMore = false;
-                });
+                _controller.finishLoad(
+                  flowGoodsList.length >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
               },
               onRefresh: () async {
+                await Future.delayed(const Duration(seconds: 2));
+                if (!mounted) {
+                  return;
+                }
                 String jsonString =
                     await rootBundle.loadString('data/home.json');
                 Map<String, dynamic> jsonMap = await json.decode(jsonString);
@@ -119,6 +130,8 @@ class _HomePageState extends State<HomePage>
                   flowGoodsList = newGoodsList;
                   page = 1;
                 });
+                _controller.finishRefresh();
+                _controller.resetFooter();
               },
             );
           } else {
@@ -143,7 +156,9 @@ class _HomePageState extends State<HomePage>
       List<Widget> listWidget = flowGoodsList
           .map((e) {
             return InkWell(
-              onTap: () => Get.to(() => GoodsDetailPage(goodsId: e['goodsId'],)),
+              onTap: () => Get.to(() => GoodsDetailPage(
+                    goodsId: e['goodsId'],
+                  )),
               child: Container(
                 width: ScreenUtil().setWidth(368),
                 color: Colors.white,
@@ -225,12 +240,13 @@ class SwiperDiy extends StatelessWidget {
         itemBuilder: (context, index) {
           final image = swiperList[index];
           return InkWell(
-            onTap: () => Get.to(() => GoodsDetailPage(goodsId: image['goodsId'],)),
-            child: Image.network(
-              image['url'],
-              fit: BoxFit.cover,
-            )
-          );
+              onTap: () => Get.to(() => GoodsDetailPage(
+                    goodsId: image['goodsId'],
+                  )),
+              child: Image.network(
+                image['url'],
+                fit: BoxFit.cover,
+              ));
         },
         indicatorLayout: PageIndicatorLayout.COLOR,
         autoplay: true,
@@ -338,7 +354,9 @@ class RecommendedGoods extends StatelessWidget {
   // 热门商品
   Widget goodsWidget(int i) {
     return InkWell(
-      onTap: () => Get.to(() => GoodsDetailPage(goodsId: goodsList[i]['goodsId'],)),
+      onTap: () => Get.to(() => GoodsDetailPage(
+            goodsId: goodsList[i]['goodsId'],
+          )),
       child: Container(
         width: ScreenUtil().setWidth(250),
         padding: EdgeInsets.all(8),
@@ -439,7 +457,9 @@ class FloorContent extends StatelessWidget {
     return Container(
       width: ScreenUtil().setWidth(375),
       child: InkWell(
-        onTap: () => Get.to(() => GoodsDetailPage(goodsId: goods['goodsId'],)),
+        onTap: () => Get.to(() => GoodsDetailPage(
+              goodsId: goods['goodsId'],
+            )),
         child: Image.network(goods['image']),
       ),
     );

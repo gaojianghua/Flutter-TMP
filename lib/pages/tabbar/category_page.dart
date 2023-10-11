@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:31:00
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-11 14:21:55
+ * @LastEditTime: 2023-10-11 17:47:34
  * @Description: file content
  */
 import 'dart:convert';
@@ -195,7 +195,7 @@ class _CategoryRightTabsState extends State<CategoryRightTabs> {
             fontSize: ScreenUtil().setSp(44.sp),
             color: isClick ? Colors.red : Colors.black,
             fontWeight: FontWeight.w600,
-          ),  
+          ),
         ),
       ),
     );
@@ -235,13 +235,23 @@ class CategoryGoodsList extends StatefulWidget {
 
 class _CategoryGoodsListState extends State<CategoryGoodsList> {
   ScrollController scrollController = new ScrollController();
-
+  late EasyRefreshController _controller;
   bool isMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = EasyRefreshController(
+      controlFinishRefresh: true,
+      controlFinishLoad: true,
+    );
+  }
 
   @override
   void dispose() {
     //为了避免内存泄露，需要调用scrollController.dispose
     scrollController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -270,6 +280,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
           child: Container(
               width: ScreenUtil().setWidth(570),
               child: EasyRefresh(
+                controller: _controller,
                 child: ListView.builder(
                   controller: scrollController,
                   itemCount: list.length,
@@ -278,27 +289,24 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                   },
                 ),
                 header: const ClassicHeader(),
-                footer: ClassicFooter(
-                  noMoreText: state.noMoreText,
-                ),
+                footer: const ClassicFooter(),
                 onLoad: () async {
-                  if (isMore) {
-                    return null;
+                  await Future.delayed(const Duration(seconds: 2));
+                  if (!mounted) {
+                    return;
                   }
-                  setState(() {
-                    isMore = true;
-                  });
-                  Future.delayed(Duration(seconds: 2), () {
-                    getMoreGoodsList(state);
-                    print(2);
-                  });
-                  setState(() {
-                    isMore = false;
-                  });
+                  getMoreGoodsList(state);
+                  _controller.finishLoad(
+                  list.length >= 30 ? IndicatorResult.noMore : IndicatorResult.success);
                 },
                 onRefresh: () async {
+                  await Future.delayed(const Duration(seconds: 2));
+                  if (!mounted) {
+                    return;
+                  }
                   getGoodsList(state.categoryId);
-                  print(1);
+                  _controller.finishRefresh();
+                  _controller.resetFooter();
                 },
               )));
     } else {
@@ -362,7 +370,9 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
 
   Widget listItem(List<GoodsData> list, int i) {
     return InkWell(
-      onTap: () => Get.to(() => GoodsDetailPage(goodsId: list[i].goodsId,)),
+      onTap: () => Get.to(() => GoodsDetailPage(
+            goodsId: list[i].goodsId,
+          )),
       child: Container(
         padding: EdgeInsets.only(top: 5, bottom: 5),
         decoration: BoxDecoration(
