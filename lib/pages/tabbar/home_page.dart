@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-11 17:34:29
+ * @LastEditTime: 2023-10-12 10:58:34
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -113,8 +113,9 @@ class _HomePageState extends State<HomePage>
                     page = 1;
                   });
                 }
-                _controller.finishLoad(
-                  flowGoodsList.length >= 20 ? IndicatorResult.noMore : IndicatorResult.success);
+                _controller.finishLoad(flowGoodsList.length >= 20
+                    ? IndicatorResult.noMore
+                    : IndicatorResult.success);
               },
               onRefresh: () async {
                 await Future.delayed(const Duration(seconds: 2));
@@ -131,6 +132,7 @@ class _HomePageState extends State<HomePage>
                   page = 1;
                 });
                 _controller.finishRefresh();
+                _controller.resetHeader();
                 _controller.resetFooter();
               },
             );

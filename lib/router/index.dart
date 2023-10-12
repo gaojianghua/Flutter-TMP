@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-06 13:53:49
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-11 13:51:46
+ * @LastEditTime: 2023-10-12 11:30:28
  * @Description: file content
  */
 import 'package:flutter_shop/pages/common/goods_detail_page.dart';

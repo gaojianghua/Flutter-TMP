@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:31:00
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-11 17:47:34
+ * @LastEditTime: 2023-10-12 10:58:22
  * @Description: file content
  */
 import 'dart:convert';
@@ -304,8 +304,10 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                   if (!mounted) {
                     return;
                   }
-                  getGoodsList(state.categoryId);
                   _controller.finishRefresh();
+                  getGoodsList(state.categoryId);
+                  
+                  _controller.resetHeader();
                   _controller.resetFooter();
                 },
               )));

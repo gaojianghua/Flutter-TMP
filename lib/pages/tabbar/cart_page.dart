@@ -28,17 +28,3 @@ class _CartPageState extends State<CartPage> {
     );
   }
 }
-
-class MyButton extends StatelessWidget {
-  const MyButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: ElevatedButton(
-        onPressed: (){},
-        child: Text('加'),
-      ),
-    );
-  }
-}
