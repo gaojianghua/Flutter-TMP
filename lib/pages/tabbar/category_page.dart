@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:31:00
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-12 10:58:22
+ * @LastEditTime: 2023-10-13 14:32:53
  * @Description: file content
  */
 import 'dart:convert';
@@ -281,12 +281,16 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
               width: ScreenUtil().setWidth(570),
               child: EasyRefresh(
                 controller: _controller,
-                child: ListView.builder(
+                child: CustomScrollView(
                   controller: scrollController,
-                  itemCount: list.length,
-                  itemBuilder: (context, index) {
-                    return listItem(list, index);
-                  },
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => listItem(list, index),
+                        childCount: list.length,
+                      ),
+                    ),
+                  ],
                 ),
                 header: const ClassicHeader(),
                 footer: const ClassicFooter(),
@@ -296,19 +300,17 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                     return;
                   }
                   getMoreGoodsList(state);
-                  _controller.finishLoad(
-                  list.length >= 30 ? IndicatorResult.noMore : IndicatorResult.success);
+                  _controller.finishLoad(list.length >= 30
+                      ? IndicatorResult.noMore
+                      : IndicatorResult.success);
                 },
                 onRefresh: () async {
                   await Future.delayed(const Duration(seconds: 2));
                   if (!mounted) {
                     return;
                   }
-                  _controller.finishRefresh();
                   getGoodsList(state.categoryId);
-                  
-                  _controller.resetHeader();
-                  _controller.resetFooter();
+                  _controller.finishRefresh();
                 },
               )));
     } else {

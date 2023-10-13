@@ -2,16 +2,18 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 10:53:47
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-09 15:20:24
+ * @LastEditTime: 2023-10-13 17:14:00
  * @Description: file content
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop/pages/common/not_found_page.dart';
+import 'package:flutter_shop/store/home_store.dart';
 import 'router/index.dart';
 import 'package:get/get.dart';
 import 'config/request/index.dart';
 import 'pages/tabbar/index_page.dart';
+import 'store/cart_store.dart';
 import 'store/system_store.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
@@ -74,8 +76,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               primarySwatch: Colors.pink,
               textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 28.sp)),
             ),
-            home: BlocProvider(
-                create: (_) => SystemStore(), child: const IndexPage()));
+            home: MultiBlocProvider(providers: [
+              BlocProvider(create: (_) => SystemStore()),
+              BlocProvider(create: (_) => HomeStore()),
+              BlocProvider(create: (_) => CartStore()),
+            ], child: const IndexPage()));
       },
     );
   }

@@ -63,33 +63,33 @@
         },
         "goodsList": [
             {
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/wine1.webp",
-                "price": "8699",
+                "price": 8699.00,
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
             },
             {
-                "mallPrice": "3999",
+                "mallPrice": 3999.00,
                 "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/wine2.webp",
-                "price": "5600",
+                "price": 5600.00,
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
             },
             {
-                "mallPrice": "8999",
+                "mallPrice": 8999.00,
                 "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/wine3.avif",
-                "price": "10880",
+                "price": 10880.00,
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
             },
             {
-                "mallPrice": "6999",
+                "mallPrice": 6999.00,
                 "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/wine4.webp",
-                "price": "8520",
+                "price": 8520.00,
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
             },
             {
-                "mallPrice": "5429",
+                "mallPrice": 5429.00,
                 "image": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/wine5.webp",
-                "price": "7589",
+                "price": 7589.00,
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
             }
         ],
@@ -144,7 +144,7 @@
                 "img": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
                 "des": "美国短毛猫是原产于美国的一种猫，其祖先为欧洲早期移民带到北美的猫种，并与英国短毛猫和欧洲短毛猫同类。美国短毛猫的身体匀称、有力量，且活泼温顺。幼年短毛猫圆头圆脑，软绵绵的手感和灵活的四肢很是讨人喜欢",
                 "price": 111.00,
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "want": 122,
                 "username": "美羊羊",
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
@@ -153,7 +153,7 @@
                 "img": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
                 "des": "布偶猫是猫中较大、较重的一种。它的头呈V形，眼大而圆，被毛丰厚，四肢粗大，尾长，身体柔软，多为三色或双色猫。",
                 "price": 111.00,
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "want": 1000,
                 "username": "小窝",
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
@@ -162,7 +162,7 @@
                 "img": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
                 "des": "布偶猫是猫中较大、较重的一种。它的头呈V形，眼大而圆，被毛丰厚，四肢粗大，尾长，身体柔软，多为三色或双色猫。",
                 "price": 111.00,
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "want": 122,
                 "username": "海绵宝宝",
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
@@ -171,7 +171,7 @@
                 "img": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
                 "des": "美国短毛猫是原产于美国的一种猫，其祖先为欧洲早期移民带到北美的猫种，并与英国短毛猫和欧洲短毛猫同类。美国短毛猫的身体匀称、有力量，且活泼温顺。幼年短毛猫圆头圆脑，软绵绵的手感和灵活的四肢很是讨人喜欢",
                 "price": 111.00,
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "want": 122,
                 "username": "流传风",
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
@@ -180,7 +180,7 @@
                 "img": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
                 "des": "美国短毛猫是原产于美国的一种猫，其祖先为欧洲早期移民带到北美的猫种，并与英国短毛猫和欧洲短毛猫同类。美国短毛猫的身体匀称、有力量，且活泼温顺。幼年短毛猫圆头圆脑，软绵绵的手感和灵活的四肢很是讨人喜欢",
                 "price": 111.00,
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "want": 122,
                 "username": "大发明家",
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
@@ -189,7 +189,7 @@
                 "img": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
                 "des": "美国短毛猫是原产于美国的一种猫，其祖先为欧洲早期移民带到北美的猫种，并与英国短毛猫和欧洲短毛猫同类。美国短毛猫的身体匀称、有力量，且活泼温顺。幼年短毛猫圆头圆脑，软绵绵的手感和灵活的四肢很是讨人喜欢",
                 "price": 111.00,
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "want": 122,
                 "username": "冰封凤凰",
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
@@ -198,7 +198,7 @@
                 "img": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
                 "des": "美国短毛猫是原产于美国的一种猫，其祖先为欧洲早期移民带到北美的猫种，并与英国短毛猫和欧洲短毛猫同类。美国短毛猫的身体匀称、有力量，且活泼温顺。幼年短毛猫圆头圆脑，软绵绵的手感和灵活的四肢很是讨人喜欢",
                 "price": 111.00,
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "want": 122,
                 "username": "宇宙星神",
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
@@ -207,7 +207,7 @@
                 "img": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
                 "des": "美国短毛猫是原产于美国的一种猫，其祖先为欧洲早期移民带到北美的猫种，并与英国短毛猫和欧洲短毛猫同类。美国短毛猫的身体匀称、有力量，且活泼温顺。幼年短毛猫圆头圆脑，软绵绵的手感和灵活的四肢很是讨人喜欢",
                 "price": 111.00,
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "want": 122,
                 "username": "宇宙星神",
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
@@ -216,7 +216,7 @@
                 "img": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
                 "des": "美国短毛猫是原产于美国的一种猫，其祖先为欧洲早期移民带到北美的猫种，并与英国短毛猫和欧洲短毛猫同类。美国短毛猫的身体匀称、有力量，且活泼温顺。幼年短毛猫圆头圆脑，软绵绵的手感和灵活的四肢很是讨人喜欢",
                 "price": 111.00,
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "want": 122,
                 "username": "宇宙星神",
                 "goodsId": "522a3511f4c545ab9547db074bb51579"
@@ -225,7 +225,7 @@
                 "img": "https://gaojianghua.oss-cn-hangzhou.aliyuncs.com/0.jpg",
                 "des": "美国短毛猫是原产于美国的一种猫，其祖先为欧洲早期移民带到北美的猫种，并与英国短毛猫和欧洲短毛猫同类。美国短毛猫的身体匀称、有力量，且活泼温顺。幼年短毛猫圆头圆脑，软绵绵的手感和灵活的四肢很是讨人喜欢",
                 "price": 111.00,
-                "mallPrice": "4569",
+                "mallPrice": 4569.00,
                 "want": 122,
                 "username": "宇宙星神",
                 "goodsId": "522a3511f4c545ab9547db074bb51579"

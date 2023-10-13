@@ -2,15 +2,18 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-12 10:58:34
+ * @LastEditTime: 2023-10-13 16:53:20
  * @Description: file content
  */
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_shop/pages/common/goods_detail_page.dart';
+import '../../models/home_model.dart';
+import '../../pages/common/goods_detail_page.dart';
+import '../../store/home_store.dart';
 import 'package:get/get.dart';
 import '../../main_models/launcher/index.dart';
 import 'package:easy_refresh/easy_refresh.dart';
@@ -25,19 +28,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   int page = 1;
-  List<Map> flowGoodsList = [];
+  List<Cards> flowGoodsList = [];
   late EasyRefreshController _controller;
   // 页面缓存
   @override
   bool get wantKeepAlive => true;
-  // 获取数据
-  getHomePageContent() async {
-    return await rootBundle.loadString('data/home.json');
-  }
 
   @override
   void initState() {
     super.initState();
+    getHomePageContent();
     _controller = EasyRefreshController(
       controlFinishRefresh: true,
       controlFinishLoad: true,
@@ -54,96 +54,72 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      appBar: AppBar(elevation: 0, title: Text('首页')),
-      body: FutureBuilder(
-        future: getHomePageContent(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            var data = json.decode(snapshot.data.toString());
-            List<Map<String, dynamic>> swiper =
-                (data['data']['slides'] as List).cast();
-            List<Map> menus = (data['data']['menus'] as List).cast();
-            String leaderImage = data['data']['shopInfo']['leaderImage'];
-            String leaderPhone = data['data']['shopInfo']['leaderPhone'];
-            List<Map> goodsList = (data['data']['goodsList'] as List).cast();
-            String floorGoodsTitleOne = data['data']['floorGoodsTitleOne'];
-            List<Map> floorGoodsListOne =
-                (data['data']['floorGoodsListOne'] as List).cast();
-            String floorGoodsTitleTwo = data['data']['floorGoodsTitleTwo'];
-            List<Map> floorGoodsListTwo =
-                (data['data']['floorGoodsListTwo'] as List).cast();
-            return EasyRefresh(
-              controller: _controller,
-              child: ListView(
-                children: [
-                  SwiperDiy(swiperList: swiper),
-                  MenuDiy(menuList: menus),
-                  LeaderPhone(
-                      leaderImage: leaderImage, leaderPhone: leaderPhone),
-                  RecommendedGoods(goodsList: goodsList),
-                  FloorContent(
-                      floorGoodsList: floorGoodsListOne,
-                      floorGoodsTitle: floorGoodsTitleOne),
-                  FloorContent(
-                      floorGoodsList: floorGoodsListTwo,
-                      floorGoodsTitle: floorGoodsTitleTwo),
-                  hotGoods()
-                ],
-              ),
-              header: const ClassicHeader(),
-              footer: const ClassicFooter(),
-              onLoad: () async {
-                await Future.delayed(const Duration(seconds: 2));
-                if (!mounted) {
-                  return;
-                }
-                String jsonString =
-                    await rootBundle.loadString('data/home.json');
-                Map<String, dynamic> jsonMap = await json.decode(jsonString);
-                List<Map> newGoodsList =
-                    (jsonMap['data']['cards'] as List).cast();
-                if (flowGoodsList.length != 0) {
-                  setState(() {
-                    flowGoodsList.addAll(newGoodsList);
-                    page++;
-                  });
-                } else {
-                  setState(() {
-                    flowGoodsList = newGoodsList;
-                    page = 1;
-                  });
-                }
-                _controller.finishLoad(flowGoodsList.length >= 20
-                    ? IndicatorResult.noMore
-                    : IndicatorResult.success);
-              },
-              onRefresh: () async {
-                await Future.delayed(const Duration(seconds: 2));
-                if (!mounted) {
-                  return;
-                }
-                String jsonString =
-                    await rootBundle.loadString('data/home.json');
-                Map<String, dynamic> jsonMap = await json.decode(jsonString);
-                List<Map> newGoodsList =
-                    (jsonMap['data']['cards'] as List).cast();
-                setState(() {
-                  flowGoodsList = newGoodsList;
-                  page = 1;
-                });
-                _controller.finishRefresh();
-                _controller.resetHeader();
-                _controller.resetFooter();
-              },
-            );
-          } else {
-            return Center(
-              child: Text('加载中...'),
-            );
-          }
-        },
-      ),
-    );
+        appBar: AppBar(elevation: 0, title: Text('首页')),
+        body: BlocBuilder<HomeStore, HomeData>(builder: (context, state) {
+          return EasyRefresh(
+            controller: _controller,
+            child: state.slides.length > 0
+                ? CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: EasyRefresh(
+                          header: MaterialHeader(),
+                          footer: MaterialFooter(),
+                          child: SwiperDiy(swiperList: state.slides),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: MenuDiy(menuList: state.menus),
+                      ),
+                      SliverToBoxAdapter(
+                        child: LeaderPhone(
+                          leaderImage: state.shopInfo.leaderImage,
+                          leaderPhone: state.shopInfo.leaderPhone,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: RecommendedGoods(goodsList: state.goodsList),
+                      ),
+                      SliverToBoxAdapter(
+                        child: FloorContent(
+                          floorGoodsList: state.floorGoodsListOne,
+                          floorGoodsTitle: state.floorGoodsTitleOne,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: FloorContent(
+                          floorGoodsList: state.floorGoodsListTwo,
+                          floorGoodsTitle: state.floorGoodsTitleTwo,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: hotGoods(),
+                      ),
+                    ],
+                  )
+                : Text('加载中'),
+            header: const ClassicHeader(),
+            footer: const ClassicFooter(),
+            onRefresh: () async {
+              await Future.delayed(const Duration(seconds: 2));
+              if (!mounted) {
+                return;
+              }
+              getHomePageContent();
+              _controller.finishRefresh();
+            },
+            onLoad: () async {
+              await Future.delayed(const Duration(seconds: 2));
+              if (!mounted) {
+                return;
+              }
+              getHomePageContent('S');
+              _controller.finishLoad(flowGoodsList.length >= 20
+                  ? IndicatorResult.noMore
+                  : IndicatorResult.success);
+            },
+          );
+        }));
   }
 
   Widget hotTitle = Container(
@@ -159,50 +135,64 @@ class _HomePageState extends State<HomePage>
           .map((e) {
             return InkWell(
               onTap: () => Get.to(() => GoodsDetailPage(
-                    goodsId: e['goodsId'],
+                    goodsId: e.goodsId,
                   )),
               child: Container(
-                width: ScreenUtil().setWidth(368),
-                color: Colors.white,
-                padding: EdgeInsets.only(left: 1, right: 1),
-                margin: EdgeInsets.only(bottom: 3),
+                width: ScreenUtil().setWidth(356),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.black12,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                margin: EdgeInsets.only(bottom: 8),
                 child: Column(
                   children: [
-                    Image.network(
-                      e['img'],
-                      fit: BoxFit.cover,
-                      width: ScreenUtil().setWidth(368),
-                    ),
+                    ClipRRect(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8)),
+                        child: Image.network(
+                          e.img,
+                          fit: BoxFit.cover,
+                          width: ScreenUtil().setWidth(356),
+                        )),
                     Padding(
-                      padding: EdgeInsets.only(top: 5),
+                      padding: EdgeInsets.only(
+                          top: 5, bottom: 10, left: 5, right: 5),
                       child: Text(
-                        e['des'],
+                        e.des,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: ScreenUtil().setSp(45.sp),
-                            color: Colors.green),
+                            color: Colors.black87),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '￥${e['mallPrice']}',
-                          style: TextStyle(
-                              fontSize: ScreenUtil().setSp(50.sp),
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red),
-                        ),
-                        Text(
-                          '￥${e['price']}',
-                          style: TextStyle(
-                              fontSize: ScreenUtil().setSp(45.sp),
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.grey),
-                        )
-                      ],
-                    )
+                    Padding(
+                        padding: EdgeInsets.only(
+                            top: 5, bottom: 5, left: 5, right: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '￥${e.mallPrice}',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(50.sp),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red),
+                            ),
+                            Text(
+                              '￥${e.price}',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(45.sp),
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.grey),
+                            )
+                          ],
+                        ))
                   ],
                 ),
               ),
@@ -211,7 +201,7 @@ class _HomePageState extends State<HomePage>
           .cast<Widget>()
           .toList();
       return Wrap(
-        spacing: 2,
+        spacing: 8,
         children: listWidget,
       );
     } else {
@@ -226,11 +216,46 @@ class _HomePageState extends State<HomePage>
       ),
     );
   }
+
+  // 获取数据
+  getHomePageContent([String? e]) async {
+    String jsonString = await rootBundle.loadString('data/home.json');
+    late Map<String, dynamic> jsonMap;
+    try {
+      jsonMap = await json.decode(jsonString);
+    } catch (e) {
+      print('JSON decode error: $e');
+    }
+
+    if (jsonMap.containsKey('data')) {
+      try {
+        Map<String, dynamic> jsonData = jsonMap['data'];
+        HomeData homeData = HomeData.fromJson(jsonData);
+        // 使用 homeData 进行后续操作
+        context.read<HomeStore>().setHomeData(homeData);
+        if (e == 'S') {
+          setState(() {
+            flowGoodsList.addAll(homeData.cards);
+            page++;
+          });
+        } else {
+          setState(() {
+            flowGoodsList.addAll(homeData.cards);
+            page = 1;
+          });
+        }
+      } catch (e) {
+        print('Error in processing homeData: $e');
+      }
+    } else {
+      print('Invalid JSON data or missing "data" key');
+    }
+  }
 }
 
 // 首页轮播图
 class SwiperDiy extends StatelessWidget {
-  final List<Map<String, dynamic>> swiperList;
+  final List<Slides> swiperList;
   SwiperDiy({required this.swiperList});
 
   @override
@@ -243,10 +268,10 @@ class SwiperDiy extends StatelessWidget {
           final image = swiperList[index];
           return InkWell(
               onTap: () => Get.to(() => GoodsDetailPage(
-                    goodsId: image['goodsId'],
+                    goodsId: image.goodsId,
                   )),
               child: Image.network(
-                image['url'],
+                image.url,
                 fit: BoxFit.cover,
               ));
         },
@@ -261,26 +286,8 @@ class SwiperDiy extends StatelessWidget {
 
 // 首页菜单
 class MenuDiy extends StatelessWidget {
-  final List<Map> menuList;
+  final List<Menus> menuList;
   const MenuDiy({super.key, required this.menuList});
-
-  Widget _buildMenuItem(BuildContext context, item) {
-    return InkWell(
-      onTap: () {
-        print('123');
-      },
-      child: Column(
-        children: [
-          Image.network(
-            item['image'],
-            width: ScreenUtil().setWidth(95),
-          ),
-          Text(item['name'],
-              style: TextStyle(fontSize: ScreenUtil().setSp(36.sp)))
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -291,9 +298,26 @@ class MenuDiy extends StatelessWidget {
         crossAxisCount: 5,
         physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.all(5.0),
-        children: menuList.map((item) {
+        children: menuList.map((Menus item) {
           return _buildMenuItem(context, item);
         }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildMenuItem(BuildContext context, item) {
+    return InkWell(
+      onTap: () {
+        print('123');
+      },
+      child: Column(
+        children: [
+          Image.network(
+            item.image,
+            width: ScreenUtil().setWidth(95),
+          ),
+          Text(item.name, style: TextStyle(fontSize: ScreenUtil().setSp(36.sp)))
+        ],
       ),
     );
   }
@@ -335,7 +359,7 @@ class LeaderPhone extends StatelessWidget {
 
 // 首页热门商品
 class RecommendedGoods extends StatelessWidget {
-  final List<Map> goodsList;
+  final List<GoodsList> goodsList;
   const RecommendedGoods({Key? key, required this.goodsList}) : super(key: key);
   // 头部标题
   Widget titleWidget() {
@@ -357,7 +381,7 @@ class RecommendedGoods extends StatelessWidget {
   Widget goodsWidget(int i) {
     return InkWell(
       onTap: () => Get.to(() => GoodsDetailPage(
-            goodsId: goodsList[i]['goodsId'],
+            goodsId: goodsList[i].goodsId,
           )),
       child: Container(
         width: ScreenUtil().setWidth(250),
@@ -368,12 +392,12 @@ class RecommendedGoods extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Image.network(goodsList[i]['image']),
+            Image.network(goodsList[i].image),
             Container(
               height: ScreenUtil().setHeight(6),
             ),
             Text(
-              '￥${goodsList[i]['mallPrice']}',
+              '￥${goodsList[i].mallPrice}',
               style: TextStyle(
                 color: Colors.red,
                 fontSize: ScreenUtil().setSp(56.sp),
@@ -381,7 +405,7 @@ class RecommendedGoods extends StatelessWidget {
               ),
             ),
             Text(
-              '￥${goodsList[i]['price']}',
+              '￥${goodsList[i].price}',
               style: TextStyle(
                 decoration: TextDecoration.lineThrough,
                 color: Colors.grey,
@@ -429,7 +453,7 @@ class RecommendedGoods extends StatelessWidget {
 
 // 首页类组商品
 class FloorContent extends StatelessWidget {
-  final List<Map> floorGoodsList;
+  final List<FloorGoodsListOne> floorGoodsList;
   final String floorGoodsTitle;
   const FloorContent(
       {super.key, required this.floorGoodsList, required this.floorGoodsTitle});
@@ -455,14 +479,14 @@ class FloorContent extends StatelessWidget {
     );
   }
 
-  Widget goodsItem(Map goods) {
+  Widget goodsItem(FloorGoodsListOne goods) {
     return Container(
       width: ScreenUtil().setWidth(375),
       child: InkWell(
         onTap: () => Get.to(() => GoodsDetailPage(
-              goodsId: goods['goodsId'],
+              goodsId: goods.goodsId,
             )),
-        child: Image.network(goods['image']),
+        child: Image.network(goods.image),
       ),
     );
   }

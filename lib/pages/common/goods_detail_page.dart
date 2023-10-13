@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-11 13:47:37
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-12 16:25:33
+ * @LastEditTime: 2023-10-13 14:44:38
  * @Description: file content
  */
 import 'dart:convert';
@@ -74,70 +74,73 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
                         changeId == 1 ? goodsHtml(info) : goodsComments()
                       ])),
                   Positioned(
-                      bottom: 0,
-                      left: 0,
-                      child: BlocBuilder<CartStore, List>(
-                          builder: (context, state) {
-                        return Container(
-                            color: Colors.white,
-                            height: ScreenUtil().setHeight(80),
-                            width: ScreenUtil().setWidth(750),
-                            child: Row(children: [
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  width: ScreenUtil().setWidth(150),
-                                  alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.shopping_cart,
-                                    size: 35,
+                    bottom: 0,
+                    left: 0,
+                    child: SafeArea(
+                        bottom: true,
+                        child: BlocBuilder<CartStore, List>(
+                            builder: (context, state) {
+                          return Container(
+                              color: Colors.white,
+                              height: ScreenUtil().setHeight(80),
+                              width: ScreenUtil().setWidth(750),
+                              child: Row(children: [
+                                InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    width: ScreenUtil().setWidth(150),
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.shopping_cart,
+                                      size: 35,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    context.read<CartStore>().save(
+                                          data['data']['goodInfo']['goodsId'],
+                                          data['data']['goodInfo']['goodsName'],
+                                          1,
+                                          data['data']['goodInfo']
+                                              ['presentPrice'],
+                                          data['data']['goodInfo']['image1'],
+                                        );
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: ScreenUtil().setHeight(80),
+                                    width: ScreenUtil().setWidth(300),
+                                    color: Colors.green,
+                                    child: Text(
+                                      '加入购物车',
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(50.sp),
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    context.read<CartStore>().remove();
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: ScreenUtil().setHeight(80),
+                                    width: ScreenUtil().setWidth(300),
                                     color: Colors.red,
+                                    child: Text(
+                                      '立即购买',
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(50.sp),
+                                          color: Colors.white),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  context.read<CartStore>().save(
-                                        data['data']['goodInfo']['goodsId'],
-                                        data['data']['goodInfo']['goodsName'],
-                                        1,
-                                        data['data']['goodInfo']
-                                            ['presentPrice'],
-                                        data['data']['goodInfo']['image1'],
-                                      );
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: ScreenUtil().setHeight(80),
-                                  width: ScreenUtil().setWidth(300),
-                                  color: Colors.green,
-                                  child: Text(
-                                    '加入购物车',
-                                    style: TextStyle(
-                                        fontSize: ScreenUtil().setSp(50.sp),
-                                        color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  context.read<CartStore>().remove();
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: ScreenUtil().setHeight(80),
-                                  width: ScreenUtil().setWidth(300),
-                                  color: Colors.red,
-                                  child: Text(
-                                    '立即购买',
-                                    style: TextStyle(
-                                        fontSize: ScreenUtil().setSp(50.sp),
-                                        color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ]));
-                      }))
+                              ]));
+                        })),
+                  )
                 ]);
               } else {
                 return const Center(child: CircularProgressIndicator());

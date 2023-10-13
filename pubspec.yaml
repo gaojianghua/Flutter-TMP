@@ -69,6 +69,7 @@ flutter:
     - data/goods.json
     - data/goods1.json
     - data/goods_detail.json
+    - data/cart.json
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
