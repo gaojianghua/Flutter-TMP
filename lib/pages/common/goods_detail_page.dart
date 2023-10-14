@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-11 13:47:37
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-13 14:44:38
+ * @LastEditTime: 2023-10-14 16:10:36
  * @Description: file content
  */
 import 'dart:convert';
@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/store/cart_store.dart';
+import '../../models/cart_model.dart';
 import 'goods_detail_logic.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -31,6 +32,11 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
 
   getGoodsDetail(String goodsId) async {
     return await rootBundle.loadString('data/goods_detail.json');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -78,7 +84,7 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
                     left: 0,
                     child: SafeArea(
                         bottom: true,
-                        child: BlocBuilder<CartStore, List>(
+                        child: BlocBuilder<CartStore, List<Datum>>(
                             builder: (context, state) {
                           return Container(
                               color: Colors.white,

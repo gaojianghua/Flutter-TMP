@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-13 17:32:20
+ * @LastEditTime: 2023-10-14 17:46:38
  * @Description: file content
  */
 import 'dart:convert';
@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_shop/store/cart_store.dart';
-
+import 'package:visibility_detector/visibility_detector.dart';
+import '../../store/cart_store.dart';
 import '../../models/cart_model.dart';
 
 class CartPage extends StatefulWidget {
@@ -21,10 +21,16 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  
   @override
   void initState() {
     super.initState();
     getCartData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -34,14 +40,33 @@ class _CartPageState extends State<CartPage> {
           elevation: 0.0,
           title: Text('购物车'),
         ),
-        body: BlocBuilder<CartStore, List<Datum>>(builder: (context, state) {
-          return state.isNotEmpty
-              ? ListView.builder(
-                  itemCount: state.length,
-                  itemBuilder: (centext, index) => cartItem(state[index]),
-                )
-              : Text('购物车为空');
-        }));
+        body: VisibilityDetector(
+            key: Key('my-widget-key'),
+            onVisibilityChanged: (visibilityInfo) {
+              // var visiblePercentage = visibilityInfo.visibleFraction * 100;
+              // debugPrint(
+              //     'Widget ${visibilityInfo.key} is $visiblePercentage% visible');
+            },
+            child:
+                BlocBuilder<CartStore, List<Datum>>(builder: (context, list) {
+              print(list);
+              return list.length > 0
+                  ? Stack(
+                      children: [
+                        ListView.builder(
+                          itemCount: list.length,
+                          itemBuilder: (centext, index) =>
+                              cartItem(list[index]),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          child: cartBottomSettlement(),
+                        )
+                      ],
+                    )
+                  : Text('购物车为空');
+            })));
   }
 
   Widget cartItem(Datum item) {
@@ -54,7 +79,7 @@ class _CartPageState extends State<CartPage> {
       ),
       child: Row(
         children: [
-          cartItemCheck(item),
+          cartItemCheck(context, item),
           cartItemImage(item),
           cartItemTitle(item),
           cartItemPrice(item)
@@ -63,13 +88,13 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget cartItemCheck(Datum item) {
+  Widget cartItemCheck(BuildContext c, Datum item) {
     return Container(
       child: Checkbox(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        value: true,
+        value: item.isChecked,
         activeColor: Colors.red,
         onChanged: (bool) {},
       ),
@@ -123,7 +148,9 @@ class _CartPageState extends State<CartPage> {
           ),
           Container(
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                context.read<CartStore>().deleteGoods(item.goodsId);
+              },
               child: Icon(
                 Icons.delete_forever,
                 size: ScreenUtil().setSp(100.sp),
@@ -136,17 +163,17 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget cartBottomSettlement(Datum item) {
+  Widget cartBottomSettlement() {
     return Container(
       padding: EdgeInsets.all(5),
       color: Colors.white,
       child: Row(
-        children: [],
+        children: [selectAllBtn(), allPriceArea(), settlementBtn()],
       ),
     );
   }
 
-  Widget selectAllBtn(Datum item) {
+  Widget selectAllBtn() {
     return Container(
       child: Row(
         children: [
@@ -166,6 +193,78 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
+  Widget allPriceArea() {
+    return Container(
+      width: ScreenUtil().setWidth(410),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                alignment: Alignment.centerRight,
+                width: ScreenUtil().setWidth(230),
+                child: Text(
+                  '合计:',
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(60.sp),
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                width: ScreenUtil().setWidth(180),
+                child: Text(
+                  '￥ 1992.00',
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(60.sp),
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
+          Container(
+            width: ScreenUtil().setWidth(410),
+            alignment: Alignment.centerRight,
+            child: Text(
+              '满10元免配送费，预购免配送费',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(40.sp),
+                color: Colors.black38,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget settlementBtn() {
+    return Container(
+      width: ScreenUtil().setWidth(160),
+      padding: EdgeInsets.only(left: 10),
+      margin: EdgeInsets.only(right: 10),
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          padding: EdgeInsets.all(10),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(3),
+          ),
+          child: Text(
+            '结算',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   getCartData() async {
     String jsonString = await rootBundle.loadString('data/cart.json');
     late Map<String, dynamic> jsonMap;
@@ -174,16 +273,7 @@ class _CartPageState extends State<CartPage> {
     } catch (e) {
       print('JSON decode error: $e');
     }
-    if (jsonMap.containsKey('data')) {
-      try {
-        CartModel cartData = CartModel.fromJson(jsonMap);
-        // 使用 homeData 进行后续操作
-        context.read<CartStore>().getCartData(cartData.data);
-      } catch (e) {
-        print('Error in processing homeData: $e');
-      }
-    } else {
-      print('Invalid JSON data or missing "data" key');
-    }
+    CartModel cartData = CartModel.fromJson(jsonMap);
+    context.read<CartStore>().getCartData(cartData.data);
   }
 }

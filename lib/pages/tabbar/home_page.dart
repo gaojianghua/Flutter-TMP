@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-13 16:53:20
+ * @LastEditTime: 2023-10-14 15:57:53
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage>
   late EasyRefreshController _controller;
   // 页面缓存
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
   @override
   void initState() {

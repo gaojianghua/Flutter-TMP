@@ -2,13 +2,13 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 10:53:47
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-13 17:14:00
+ * @LastEditTime: 2023-10-14 17:13:44
  * @Description: file content
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop/pages/common/not_found_page.dart';
-import 'package:flutter_shop/store/home_store.dart';
+import 'store/home_store.dart';
 import 'router/index.dart';
 import 'package:get/get.dart';
 import 'config/request/index.dart';
@@ -21,7 +21,17 @@ import 'package:easy_refresh/easy_refresh.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   CustomDio();
+  Bloc.observer = const AppBlocObserver();
   runApp(MyApp());
+}
+
+class AppBlocObserver extends BlocObserver {
+  const AppBlocObserver();
+
+  @override
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
+    super.onChange(bloc, change);
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -77,9 +87,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 28.sp)),
             ),
             home: MultiBlocProvider(providers: [
-              BlocProvider(create: (_) => SystemStore()),
-              BlocProvider(create: (_) => HomeStore()),
-              BlocProvider(create: (_) => CartStore()),
+              BlocProvider<CartStore>(create: (centext) => CartStore()),
+              BlocProvider<SystemStore>(create: (centext) => SystemStore()),
+              BlocProvider<HomeStore>(create: (centext) => HomeStore()),
             ], child: const IndexPage()));
       },
     );

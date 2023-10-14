@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:31:00
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-13 14:32:53
+ * @LastEditTime: 2023-10-14 17:41:43
  * @Description: file content
  */
 import 'dart:convert';
@@ -295,7 +295,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                 header: const ClassicHeader(),
                 footer: const ClassicFooter(),
                 onLoad: () async {
-                  await Future.delayed(const Duration(seconds: 2));
+                  await Future.delayed(const Duration(seconds: 1));
                   if (!mounted) {
                     return;
                   }
@@ -305,7 +305,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                       : IndicatorResult.success);
                 },
                 onRefresh: () async {
-                  await Future.delayed(const Duration(seconds: 2));
+                  await Future.delayed(const Duration(seconds: 1));
                   if (!mounted) {
                     return;
                   }

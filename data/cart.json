@@ -7,28 +7,32 @@
             "goodsName": "五粮液52°500ml",
             "count": 1,
             "price": 830.0,
-            "images": "http://images.baixingliangfan.cn/shopGoodsImg/20181229/20181229211422_8507.jpg"
+            "images": "http://images.baixingliangfan.cn/shopGoodsImg/20181229/20181229211422_8507.jpg",
+            "isChecked": true
         },
         {
             "images": "http://images.baixingliangfan.cn/compressedPic/20190116145309_40.jpg",
             "price": 2.50,
             "count": 1,
             "goodsName": "哈尔滨冰爽啤酒330ml",
-            "goodsId": "3194330cf25f43c3934dbb8c2a964ade"
+            "goodsId": "3194330cf25f43c3934dbb8c2a964ade",
+            "isChecked": true
         },
         {
             "images": "http://images.baixingliangfan.cn/compressedPic/20190115185215_1051.jpg",
             "price": 2.00,
             "count": 1,
             "goodsName": "燕京啤酒8°330ml",
-            "goodsId": "522a3511f4c545ab9547db074bb51579"
+            "goodsId": "522a3511f4c545ab9547db074bb51579",
+            "isChecked": true
         },
         {
             "images": "http://images.baixingliangfan.cn/compressedPic/20190121102419_9362.jpg",
             "price": 1.98,
             "count": 1,
             "goodsName": "崂山清爽8°330ml",
-            "goodsId": "bbdbd5028cc849c2998ff84fb55cb934"
+            "goodsId": "bbdbd5028cc849c2998ff84fb55cb934",
+            "isChecked": true
         }
     ]
 }

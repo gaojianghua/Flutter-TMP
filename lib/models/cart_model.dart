@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-07 10:44:47
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-13 16:09:04
+ * @LastEditTime: 2023-10-14 09:45:47
  * @Description: file content
  */
 class CartModel {
@@ -35,6 +35,7 @@ class Datum {
     int count;
     double price;
     String images;
+    bool isChecked;
 
     Datum({
         required this.goodsId,
@@ -42,6 +43,7 @@ class Datum {
         required this.count,
         required this.price,
         required this.images,
+        required this.isChecked
     });
 
     factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -50,6 +52,7 @@ class Datum {
         count: json["count"],
         price: json["price"]?.toDouble(),
         images: json["images"],
+        isChecked: json["isChecked"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -58,6 +61,7 @@ class Datum {
         "count": count,
         "price": price,
         "images": images,
+        "isChecked": isChecked,
     };
 }
 
