@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-12 15:48:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-16 12:41:58
+ * @LastEditTime: 2023-10-16 13:17:14
  * @Description: file content
  */
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,8 +18,10 @@ class CartStore extends Bloc<List<Datum>, List<Datum>> {
     emit(event);
   }
 
-  void addGoods(Datum goods) {
+  void addGoods(Datum goods) async {
+    var ps = PersistentStorage();
     final updatedState = List<Datum>.from(state)..add(goods);
+    await ps.setStorage('cartInfo', updatedState);
     add(updatedState);
   }
 

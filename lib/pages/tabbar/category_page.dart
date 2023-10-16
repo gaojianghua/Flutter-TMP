@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:31:00
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-16 10:54:54
+ * @LastEditTime: 2023-10-16 17:43:50
  * @Description: file content
  */
 import 'dart:convert';
@@ -26,23 +26,28 @@ class CategoryPage extends StatefulWidget {
   State<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _CategoryPageState extends State<CategoryPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: Text('分类'),
-        ),
-        body: Row(
-          children: [
-            CategoryLevel(),
-            Column(
-              children: [CategoryRightTabs(), CategoryGoodsList()],
-            )
-          ],
-        ),
-      );
+      appBar: AppBar(
+        elevation: 0,
+        title: Text('分类'),
+      ),
+      body: Row(
+        children: [
+          CategoryLevel(),
+          Column(
+            children: [CategoryRightTabs(), CategoryGoodsList()],
+          )
+        ],
+      ),
+    );
   }
 }
 
@@ -56,9 +61,9 @@ class _CategoryLevelState extends State<CategoryLevel> {
   var current = 0;
   @override
   void initState() {
-    super.initState();
     getCategory();
     getGoodsList();
+    super.initState();
   }
 
   @override
@@ -221,21 +226,18 @@ class _CategoryRightTabsState extends State<CategoryRightTabs> {
 }
 
 class CategoryGoodsList extends StatefulWidget {
-  const CategoryGoodsList({super.key});
-
-  @override
   State<CategoryGoodsList> createState() => _CategoryGoodsListState();
 }
 
 class _CategoryGoodsListState extends State<CategoryGoodsList> {
   ScrollController scrollController = new ScrollController();
-  late EasyRefreshController _controller;
+  late EasyRefreshController categoryController;
   bool isMore = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = EasyRefreshController(
+    categoryController = EasyRefreshController(
       controlFinishRefresh: true,
       controlFinishLoad: true,
     );
@@ -245,7 +247,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
   void dispose() {
     //为了避免内存泄露，需要调用scrollController.dispose
     scrollController.dispose();
-    _controller.dispose();
+    categoryController.dispose();
     super.dispose();
   }
 
@@ -274,7 +276,7 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
           child: Container(
               width: ScreenUtil().setWidth(570),
               child: EasyRefresh(
-                controller: _controller,
+                controller: categoryController,
                 child: CustomScrollView(
                   controller: scrollController,
                   slivers: <Widget>[
@@ -286,15 +288,13 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                     ),
                   ],
                 ),
-                header: const ClassicHeader(),
-                footer: const ClassicFooter(),
                 onLoad: () async {
                   await Future.delayed(const Duration(seconds: 1));
                   if (!mounted) {
                     return;
                   }
                   getMoreGoodsList(state);
-                  _controller.finishLoad(list.length >= 30
+                  categoryController.finishLoad(list.length >= 30
                       ? IndicatorResult.noMore
                       : IndicatorResult.success);
                 },
@@ -304,7 +304,8 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                     return;
                   }
                   getGoodsList(state.categoryId);
-                  _controller.finishRefresh();
+                  categoryController.finishRefresh();
+                  categoryController.resetFooter();
                 },
               )));
     } else {

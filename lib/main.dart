@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 10:53:47
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-16 11:14:21
+ * @LastEditTime: 2023-10-16 17:06:51
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -19,17 +19,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   CustomDio();
-  Bloc.observer = const AppBlocObserver();
   runApp(MyApp());
-}
-
-class AppBlocObserver extends BlocObserver {
-  const AppBlocObserver();
-
-  @override
-  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
-    super.onChange(bloc, change);
-  }
 }
 
 class MyApp extends StatefulWidget {

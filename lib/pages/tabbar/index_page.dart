@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:03:34
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-16 11:12:10
+ * @LastEditTime: 2023-10-16 17:37:08
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -60,17 +60,17 @@ class _IndexPageState extends State<IndexPage> {
 
   final List<Widget> pages = [
     BlocProvider<HomeStore>(
-        create: (context) => HomeStore(), child: const HomePage()),
+        create: (context) => HomeStore(), child: HomePage()),
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => CategoryStore()),
         BlocProvider(create: (_) => CategoryGoodsListStore()),
       ],
-      child: const CategoryPage()),
-    const MessagePage(),
+      child: CategoryPage()),
+    MessagePage(),
     BlocProvider<CartStore>(
         create: (context) => CartStore(), child: CartPage()),
-    const MyPage(),
+    MyPage(),
   ];
 
   @override
@@ -89,10 +89,7 @@ class _IndexPageState extends State<IndexPage> {
           });
         },
       ),
-      body: IndexedStack(
-        index: currentIndex,
-        children: pages,
-      ),
+      body: pages[currentIndex],
       floatingActionButton: Container(
         height: 60,
         width: 60,

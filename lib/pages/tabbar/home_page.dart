@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-16 11:59:11
+ * @LastEditTime: 2023-10-16 17:43:35
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -19,102 +19,101 @@ import '../../main_models/launcher/index.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   int page = 1;
   List<Cards> flowGoodsList = [];
-  late EasyRefreshController _controller;
+  late EasyRefreshController homeController;
 
   @override
   void initState() {
-    super.initState();
     getHomePageContent();
-    _controller = EasyRefreshController(
+    homeController = EasyRefreshController(
       controlFinishRefresh: true,
       controlFinishLoad: true,
     );
+    super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    homeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
-            appBar: AppBar(elevation: 0, title: Text('首页')),
-            body: BlocBuilder<HomeStore, HomeData>(builder: (context, state) {
-              return EasyRefresh(
-                controller: _controller,
-                child: state.slides.length > 0
-                    ? CustomScrollView(
-                        slivers: [
-                          SliverToBoxAdapter(
-                            child: EasyRefresh(
-                              header: MaterialHeader(),
-                              footer: MaterialFooter(),
-                              child: SwiperDiy(swiperList: state.slides),
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: MenuDiy(menuList: state.menus),
-                          ),
-                          SliverToBoxAdapter(
-                            child: LeaderPhone(
-                              leaderImage: state.shopInfo.leaderImage,
-                              leaderPhone: state.shopInfo.leaderPhone,
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: RecommendedGoods(goodsList: state.goodsList),
-                          ),
-                          SliverToBoxAdapter(
-                            child: FloorContent(
-                              floorGoodsList: state.floorGoodsListOne,
-                              floorGoodsTitle: state.floorGoodsTitleOne,
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: FloorContent(
-                              floorGoodsList: state.floorGoodsListTwo,
-                              floorGoodsTitle: state.floorGoodsTitleTwo,
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: hotGoods(),
-                          ),
-                        ],
-                      )
-                    : Text('加载中'),
-                header: const ClassicHeader(),
-                footer: const ClassicFooter(),
-                onRefresh: () async {
-                  await Future.delayed(const Duration(seconds: 2));
-                  if (!mounted) {
-                    return;
-                  }
-                  getHomePageContent();
-                  _controller.finishRefresh();
-                },
-                onLoad: () async {
-                  await Future.delayed(const Duration(seconds: 2));
-                  if (!mounted) {
-                    return;
-                  }
-                  getHomePageContent('S');
-                  _controller.finishLoad(flowGoodsList.length >= 20
-                      ? IndicatorResult.noMore
-                      : IndicatorResult.success);
-                },
-              );
-            }));
+        appBar: AppBar(elevation: 0, title: Text('首页')),
+        body: BlocBuilder<HomeStore, HomeData>(builder: (context, state) {
+          return EasyRefresh(
+            // controller: homeController,
+            child: state.slides.length > 0
+                ? CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: EasyRefresh(
+                          child: SwiperDiy(swiperList: state.slides),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: MenuDiy(menuList: state.menus),
+                      ),
+                      SliverToBoxAdapter(
+                        child: LeaderPhone(
+                          leaderImage: state.shopInfo.leaderImage,
+                          leaderPhone: state.shopInfo.leaderPhone,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: RecommendedGoods(goodsList: state.goodsList),
+                      ),
+                      SliverToBoxAdapter(
+                        child: FloorContent(
+                          floorGoodsList: state.floorGoodsListOne,
+                          floorGoodsTitle: state.floorGoodsTitleOne,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: FloorContent(
+                          floorGoodsList: state.floorGoodsListTwo,
+                          floorGoodsTitle: state.floorGoodsTitleTwo,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: hotGoods(),
+                      ),
+                    ],
+                  )
+                : Text('加载中'),
+            onRefresh: () async {
+              await Future.delayed(const Duration(seconds: 2));
+              if (!mounted) {
+                return;
+              }
+              getHomePageContent();
+              homeController.finishRefresh();
+              homeController.resetFooter();
+            },
+            onLoad: () async {
+              await Future.delayed(const Duration(seconds: 2));
+              if (!mounted) {
+                return;
+              }
+              getHomePageContent('S');
+              homeController.finishLoad(flowGoodsList.length >= 20
+                  ? IndicatorResult.noMore
+                  : IndicatorResult.success);
+            },
+          );
+        }));
   }
 
   Widget hotTitle = Container(
@@ -130,14 +129,9 @@ class _HomePageState extends State<HomePage> {
           .map((e) {
             return InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            GoodsDetailPage(goodsId: e.goodsId)));
-                // Get.toNamed('/goods_detail', arguments: {
-                //   'goodsId': e.goodsId,
-                // });
+                Get.toNamed('/goods_detail', arguments: {
+                  'goodsId': e.goodsId,
+                });
               },
               child: Container(
                 width: ScreenUtil().setWidth(356),

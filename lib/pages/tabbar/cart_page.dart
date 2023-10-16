@@ -2,16 +2,13 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-16 12:03:49
+ * @LastEditTime: 2023-10-16 17:21:57
  * @Description: file content
  */
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+import '../../main_models/storage/index.dart';
 import '../../store/cart_store.dart';
 import '../../models/cart_model.dart';
 
@@ -28,44 +25,29 @@ class _CartPageState extends State<CartPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
           title: Text('购物车'),
         ),
-        body: VisibilityDetector(
-            key: Key('my-widget-key'),
-            onVisibilityChanged: (visibilityInfo) {
-              // var visiblePercentage = visibilityInfo.visibleFraction * 100;
-              // debugPrint(
-              //     'Widget ${visibilityInfo.key} is $visiblePercentage% visible');
-            },
-            child:
-                BlocBuilder<CartStore, List<Datum>>(
-                  builder: (context, list) {
-              return list.length > 0
-                  ? Stack(
-                      children: [
-                        ListView.builder(
-                          itemCount: list.length,
-                          itemBuilder: (centext, index) =>
-                              cartItem(list[index]),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          child: cartBottomSettlement(),
-                        )
-                      ],
+        body: BlocBuilder<CartStore, List<Datum>>(builder: (context, list) {
+          return list.length > 0
+              ? Stack(
+                  children: [
+                    ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (centext, index) => cartItem(list[index]),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: cartBottomSettlement(),
                     )
-                  : Text('购物车为空');
-            })));
+                  ],
+                )
+              : Text('购物车为空');
+        }));
   }
 
   Widget cartItem(Datum item) {
@@ -76,7 +58,7 @@ class _CartPageState extends State<CartPage> {
         color: Colors.white,
         border: Border(bottom: BorderSide(width: 0.5, color: Colors.black12)),
       ),
-      child: Row(
+      child: Row( 
         children: [
           cartItemCheck(context, item),
           cartItemImage(item),
@@ -265,14 +247,18 @@ class _CartPageState extends State<CartPage> {
   }
 
   getCartData() async {
-    String jsonString = await rootBundle.loadString('data/cart.json');
-    late Map<String, dynamic> jsonMap;
-    try {
-      jsonMap = await json.decode(jsonString);
-    } catch (e) {
-      print('JSON decode error: $e');
-    }
-    CartModel cartData = CartModel.fromJson(jsonMap);
-    context.read<CartStore>().getCartData(cartData.data);
+    // String jsonString = await rootBundle.loadString('data/cart.json');
+    // late Map<String, dynamic> jsonMap;
+    // try {
+    //   jsonMap = await json.decode(jsonString);
+    // } catch (e) {
+    //   print('JSON decode error: $e');
+    // }
+    // // CartModel cartData = CartModel.fromJson(jsonMap);
+    var ps = PersistentStorage();
+    List<dynamic> tempList = await ps.getStorage('cartInfo');
+    List<Datum> updatedState =
+        tempList.map((item) => Datum.fromJson(item)).toList();
+    context.read<CartStore>().getCartData(updatedState);
   }
 }
