@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:31:00
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-14 17:41:43
+ * @LastEditTime: 2023-10-16 10:54:54
  * @Description: file content
  */
 import 'dart:convert';
@@ -30,16 +30,11 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text('分类'),
-      ),
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (_) => CategoryStore()),
-          BlocProvider(create: (_) => CategoryGoodsListStore()),
-        ],
-        child: Row(
+        appBar: AppBar(
+          elevation: 0,
+          title: Text('分类'),
+        ),
+        body: Row(
           children: [
             CategoryLevel(),
             Column(
@@ -47,8 +42,7 @@ class _CategoryPageState extends State<CategoryPage> {
             )
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

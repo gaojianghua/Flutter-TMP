@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-14 17:46:38
+ * @LastEditTime: 2023-10-16 12:03:49
  * @Description: file content
  */
 import 'dart:convert';
@@ -21,7 +21,6 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  
   @override
   void initState() {
     super.initState();
@@ -48,8 +47,8 @@ class _CartPageState extends State<CartPage> {
               //     'Widget ${visibilityInfo.key} is $visiblePercentage% visible');
             },
             child:
-                BlocBuilder<CartStore, List<Datum>>(builder: (context, list) {
-              print(list);
+                BlocBuilder<CartStore, List<Datum>>(
+                  builder: (context, list) {
               return list.length > 0
                   ? Stack(
                       children: [

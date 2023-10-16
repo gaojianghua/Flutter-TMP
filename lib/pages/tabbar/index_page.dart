@@ -2,10 +2,15 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:03:34
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-14 15:24:39
+ * @LastEditTime: 2023-10-16 11:12:10
  * @Description: file content
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_shop/store/home_store.dart';
+import '../../store/cart_store.dart';
+import '../../store/category_goods_list_store.dart';
+import '../../store/category_store.dart';
 import 'home_page.dart';
 import 'category_page.dart';
 import 'my_page.dart';
@@ -54,10 +59,17 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   final List<Widget> pages = [
-    const HomePage(),
-    const CategoryPage(),
+    BlocProvider<HomeStore>(
+        create: (context) => HomeStore(), child: const HomePage()),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => CategoryStore()),
+        BlocProvider(create: (_) => CategoryGoodsListStore()),
+      ],
+      child: const CategoryPage()),
     const MessagePage(),
-    CartPage(),
+    BlocProvider<CartStore>(
+        create: (context) => CartStore(), child: CartPage()),
     const MyPage(),
   ];
 
