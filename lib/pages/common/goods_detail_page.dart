@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-11 13:47:37
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-16 15:18:50
+ * @LastEditTime: 2023-10-17 14:07:49
  * @Description: file content
  */
 import 'dart:convert';
@@ -51,25 +51,6 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
     goodComments: [],
     advertesPicture: AdvertesPicture(pICTUREADDRESS: '', tOPLACE: ''),
   );
-
-  addCart(Datum newGoods, BuildContext context) async {
-    final cartStore = BlocProvider.of<CartStore>(context);
-    bool isHave = false;
-    int ival = 0;
-    List<Datum> updateState = cartStore.state;
-    print(updateState);
-    updateState.forEach((item) {
-      if (item.goodsId == newGoods.goodsId) {
-        updateState[ival].count = item.count + 1;
-        isHave = true;
-      }
-      ival++;
-    });
-    if (!isHave) {
-      updateState.add(newGoods);
-    }
-    cartStore.getCartData(updateState);
-  }
 
   @override
   void initState() {
@@ -135,9 +116,8 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
                               ),
                             ),
                           ),
-                          BlocBuilder<CartStore, List<Datum>>(
+                          BlocBuilder<CartStore, MyState>(
                               builder: (context, state) {
-                                print(state);
                             return InkWell(
                               onTap: () {
                                 Datum goods = Datum(
@@ -148,7 +128,7 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
                                   images: goodsDetail.goodInfo.image1,
                                   isChecked: true,
                                 );
-                                addCart(goods, context);
+                                context.read<CartStore>().addGoods(goods);
                               },
                               child: Container(
                                 alignment: Alignment.center,

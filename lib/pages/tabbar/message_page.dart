@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-25 17:09:32
+ * @LastEditTime: 2023-10-17 09:41:49
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -14,7 +14,8 @@ class MessagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Message'),
+        title: const Text('消息'),
+        elevation: 0.0,
       ),
       body: Container(),
     );

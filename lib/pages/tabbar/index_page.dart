@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:03:34
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-16 17:37:08
+ * @LastEditTime: 2023-10-17 09:39:15
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -89,26 +89,29 @@ class _IndexPageState extends State<IndexPage> {
           });
         },
       ),
-      body: pages[currentIndex],
-      floatingActionButton: Container(
-        height: 60,
-        width: 60,
-        padding: const EdgeInsets.all(5),
-        margin: const EdgeInsets.only(top: 0),
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(30)),
-        child: FloatingActionButton(
-          // backgroundColor: currentPage == 2 ? Colors.red : Colors.blue,
-          onPressed: () {
-            setState(() {
-              currentIndex = 2;
-              currentPage = pages[currentIndex];
-            });
-          },
-          child: const Icon(Icons.add),
-        ),
+      body: IndexedStack(
+        index: currentIndex,
+        children: pages,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: Container(
+      //   height: 60,
+      //   width: 60,
+      //   padding: const EdgeInsets.all(5),
+      //   margin: const EdgeInsets.only(top: 0),
+      //   decoration: BoxDecoration(
+      //       color: Colors.white, borderRadius: BorderRadius.circular(30)),
+      //   child: FloatingActionButton(
+      //     // backgroundColor: currentPage == 2 ? Colors.red : Colors.blue,
+      //     onPressed: () {
+      //       setState(() {
+      //         currentIndex = 2;
+      //         currentPage = pages[currentIndex];
+      //       });
+      //     },
+      //     child: const Icon(Icons.add),
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       drawer: Drawer(
         child: Column(
           children: [

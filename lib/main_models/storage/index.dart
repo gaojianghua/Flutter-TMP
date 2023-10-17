@@ -19,11 +19,12 @@ class PersistentStorage {
 
   // 之所以这个没有写在 _init中，是因为SharedPreferences.getInstance是一个异步的方法 需要用await接收它的值
   _initStorage() async {
-    try {
-      _storage ??= await SharedPreferences.getInstance();
-    } catch (e) {
-      _storage = await SharedPreferences.getInstance();
-    }
+    _storage = await SharedPreferences.getInstance();
+    // try {
+    //   _storage ??= await SharedPreferences.getInstance();
+    // } catch (e) {
+    //   _storage = await SharedPreferences.getInstance();
+    // }
   }
 
   /// 设置存储

@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:45
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-26 10:00:04
+ * @LastEditTime: 2023-10-17 09:42:15
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -29,6 +29,7 @@ class _MyPageState extends State<MyPage> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            elevation: 0.0,
             leading: IconButton(
               //左侧的按钮图标
               icon: const Icon(Icons.menu),
