@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-17 15:55:34
+ * @LastEditTime: 2023-10-18 09:34:53
  * @Description: file content
  */
 import 'dart:convert';
@@ -35,10 +35,10 @@ class _CartPageState extends State<CartPage> {
           title: Text('购物车'),
         ),
         body: BlocBuilder<CartStore, MyState>(builder: (context, state) {
-          return state.cartList.length > 0
-              ? Stack(
-                  children: [
-                    EasyRefresh(
+          return Stack(
+            children: [
+              state.cartList.length > 0
+                  ? EasyRefresh(
                       child: Padding(
                           padding: EdgeInsets.only(
                               bottom: ScreenUtil().setHeight(80)),
@@ -60,23 +60,23 @@ class _CartPageState extends State<CartPage> {
                         }
                         getCartData();
                       },
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      child: cartBottomSettlement(state),
                     )
-                  ],
-                )
-              : Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    '购物车为空',
-                    style: TextStyle(
-                        fontSize: ScreenUtil().setSp(45.sp),
-                        color: Colors.black87),
-                  ),
-                );
+                  : Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        '购物车为空',
+                        style: TextStyle(
+                            fontSize: ScreenUtil().setSp(45.sp),
+                            color: Colors.black87),
+                      ),
+                    ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                child: cartBottomSettlement(state),
+              )
+            ],
+          );
         }));
   }
 

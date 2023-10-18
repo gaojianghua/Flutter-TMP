@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-11 13:47:37
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-17 14:07:49
+ * @LastEditTime: 2023-10-18 10:54:17
  * @Description: file content
  */
 import 'dart:convert';
@@ -13,8 +13,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/models/goods_detail_model.dart';
 import 'package:flutter_shop/store/cart_store.dart';
+import 'package:get/get.dart';
 import '../../models/cart_model.dart';
 import 'package:flutter_html/flutter_html.dart';
+
+import '../../store/system_store.dart';
 
 class GoodsDetailPage extends StatefulWidget {
   final String? goodsId;
@@ -65,9 +68,10 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CartStore>(
-        create: (context) => CartStore(),
-        child: Scaffold(
+    return MultiBlocProvider(providers: [
+              BlocProvider<SystemStore>(create: (centext) => SystemStore()),
+              BlocProvider<CartStore>(create: (centext) => CartStore()),
+            ], child: Scaffold(
             appBar: AppBar(
               title: const Text('商品详情'),
               elevation: 0.0,
@@ -104,18 +108,24 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
                         height: ScreenUtil().setHeight(80),
                         width: ScreenUtil().setWidth(750),
                         child: Row(children: [
-                          InkWell(
-                            onTap: () {},
-                            child: Container(
-                              width: ScreenUtil().setWidth(150),
-                              alignment: Alignment.center,
-                              child: Icon(
-                                Icons.shopping_cart,
-                                size: 35,
-                                color: Colors.red,
+                          BlocBuilder<CartStore, MyState>(
+                              builder: (context, state) {
+                            return InkWell(
+                              onTap: () {
+                                context.read<SystemStore>().setTabbarIndex(3);
+                                Get.back();
+                              },
+                              child: Container(
+                                width: ScreenUtil().setWidth(150),
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.shopping_cart,
+                                  size: 35,
+                                  color: Colors.red,
+                                ),
                               ),
-                            ),
-                          ),
+                            );})
+                          ,
                           BlocBuilder<CartStore, MyState>(
                               builder: (context, state) {
                             return InkWell(

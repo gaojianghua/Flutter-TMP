@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-16 17:43:35
+ * @LastEditTime: 2023-10-18 11:32:26
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -18,6 +18,8 @@ import 'package:get/get.dart';
 import '../../main_models/launcher/index.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
+import '../home/news_page.dart';
+
 class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
@@ -25,7 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
   int page = 1;
   List<Cards> flowGoodsList = [];
@@ -304,7 +306,7 @@ class MenuDiy extends StatelessWidget {
   Widget _buildMenuItem(BuildContext context, item) {
     return InkWell(
       onTap: () {
-        print('123');
+        Get.to(() => NewsPage());
       },
       child: Column(
         children: [

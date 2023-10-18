@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-12 15:48:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-17 17:58:36
+ * @LastEditTime: 2023-10-18 11:01:32
  * @Description: file content
  */
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,6 +87,9 @@ class CartStore extends Cubit<MyState> {
       }
     });
     state.cartList.removeAt(tempIndex);
+    if (state.cartList.length == 0) {
+      state.allCheck = false;
+    }
     var ps = PersistentStorage();
     await ps.setStorage('cartInfo', state.cartList);
     emit(MyState(

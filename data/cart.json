@@ -33,6 +33,14 @@
             "goodsName": "崂山清爽8°330ml",
             "goodsId": "bbdbd5028cc849c2998ff84fb55cb934",
             "isChecked": false
+        },
+        {
+            "images": "http://images.baixingliangfan.cn/compressedPic/20190121102419_9362.jpg",
+            "price": 0.01,
+            "count": 1,
+            "goodsName": "崂山清爽8°450ml",
+            "goodsId": "bbdbd5028cc849c2998ff84fb55cb999",
+            "isChecked": false
         }
     ]
 }

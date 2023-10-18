@@ -1,8 +1,22 @@
+/*
+ * @Author: 高江华 g598670138@163.com
+ * @Date: 2023-09-22 17:50:33
+ * @LastEditors: 高江华
+ * @LastEditTime: 2023-10-18 11:01:40
+ * @Description: file content
+ */
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SystemStore extends Cubit<int> {
-  SystemStore() : super(0);
+class SystemState {
+  final int tabbarIndex;
 
-  void increment() => emit(state + 1);
-  void decrement() => emit(state - 1);
+  SystemState({
+    required this.tabbarIndex
+  });
+}
+
+class SystemStore extends Cubit<SystemState> {
+  SystemStore() : super(SystemState(tabbarIndex: 0));
+
+  void setTabbarIndex(int i) => emit(SystemState(tabbarIndex: i));
 }
