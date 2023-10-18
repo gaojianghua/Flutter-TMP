@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-12 15:48:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-18 11:01:32
+ * @LastEditTime: 2023-10-18 13:51:44
  * @Description: file content
  */
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,8 +82,10 @@ class CartStore extends Cubit<MyState> {
     state.cartList.forEach((item) {
       if (item.goodsId == id) {
         tempIndex = state.cartList.indexOf(item);
-        state.allCount -= item.count;
-        state.allPrice -= Decimal.parse(item.price.toString()) * Decimal.fromInt(item.count);
+        if(item.isChecked) {
+          state.allCount -= item.count;
+          state.allPrice -= Decimal.parse(item.price.toString()) * Decimal.fromInt(item.count);
+        }
       }
     });
     state.cartList.removeAt(tempIndex);

@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-11 13:47:37
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-18 10:54:17
+ * @LastEditTime: 2023-10-18 13:47:01
  * @Description: file content
  */
 import 'dart:convert';
@@ -68,10 +68,12 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(providers: [
-              BlocProvider<SystemStore>(create: (centext) => SystemStore()),
-              BlocProvider<CartStore>(create: (centext) => CartStore()),
-            ], child: Scaffold(
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<SystemStore>(create: (centext) => SystemStore()),
+          BlocProvider<CartStore>(create: (centext) => CartStore()),
+        ],
+        child: Scaffold(
             appBar: AppBar(
               title: const Text('商品详情'),
               elevation: 0.0,
@@ -108,24 +110,52 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
                         height: ScreenUtil().setHeight(80),
                         width: ScreenUtil().setWidth(750),
                         child: Row(children: [
-                          BlocBuilder<CartStore, MyState>(
-                              builder: (context, state) {
-                            return InkWell(
-                              onTap: () {
-                                context.read<SystemStore>().setTabbarIndex(3);
-                                Get.back();
-                              },
-                              child: Container(
-                                width: ScreenUtil().setWidth(150),
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.shopping_cart,
-                                  size: 35,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            );})
-                          ,
+                          Stack(
+                            children: [
+                              BlocBuilder<CartStore, MyState>(
+                                  builder: (context, state) {
+                                return InkWell(
+                                  onTap: () {
+                                    context
+                                        .read<SystemStore>()
+                                        .setTabbarIndex(3);
+                                    Get.back();
+                                  },
+                                  child: Container(
+                                    width: ScreenUtil().setWidth(150),
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.shopping_cart,
+                                      size: 35,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                );
+                              }),
+                              BlocBuilder<CartStore, MyState>(
+                                  builder: (context, state) {
+                                return Positioned(
+                                  top: 0,
+                                  right: 20,
+                                  child: Container(
+                                    padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      border: Border.all(width: 2, color: Colors.white),
+                                      borderRadius: BorderRadius.all(Radius.circular(15))
+                                    ),
+                                    child: Text(
+                                      "${state.allCount}",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(35.sp)
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              })
+                            ],
+                          ),
                           BlocBuilder<CartStore, MyState>(
                               builder: (context, state) {
                             return InkWell(

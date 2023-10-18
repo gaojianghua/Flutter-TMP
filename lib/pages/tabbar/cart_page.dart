@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-18 09:34:53
+ * @LastEditTime: 2023-10-18 14:00:25
  * @Description: file content
  */
 import 'dart:convert';
@@ -37,39 +37,42 @@ class _CartPageState extends State<CartPage> {
         body: BlocBuilder<CartStore, MyState>(builder: (context, state) {
           return Stack(
             children: [
-              state.cartList.length > 0
-                  ? EasyRefresh(
-                      child: Padding(
-                          padding: EdgeInsets.only(
-                              bottom: ScreenUtil().setHeight(80)),
-                          child: CustomScrollView(
-                            slivers: <Widget>[
-                              SliverList(
+              EasyRefresh(
+                child: Padding(
+                    padding:
+                        EdgeInsets.only(bottom: ScreenUtil().setHeight(80)),
+                    child: CustomScrollView(
+                      slivers: <Widget>[
+                        state.cartList.length > 0
+                            ? SliverList(
                                 delegate: SliverChildBuilderDelegate(
                                   (context, index) =>
                                       cartItem(state.cartList[index], state),
                                   childCount: state.cartList.length,
                                 ),
-                              ),
-                            ],
-                          )),
-                      onRefresh: () async {
-                        await Future.delayed(const Duration(seconds: 2));
-                        if (!mounted) {
-                          return;
-                        }
-                        getCartData();
-                      },
-                    )
-                  : Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '购物车为空',
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(45.sp),
-                            color: Colors.black87),
-                      ),
-                    ),
+                              )
+                            : SliverToBoxAdapter(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.only(top: 200),
+                                  child: Text(
+                                    '购物车为空',
+                                    style: TextStyle(
+                                        fontSize: ScreenUtil().setSp(45.sp),
+                                        color: Colors.black87),
+                                  ),
+                                ),
+                              )
+                      ],
+                    )),
+                onRefresh: () async {
+                  await Future.delayed(const Duration(seconds: 2));
+                  if (!mounted) {
+                    return;
+                  }
+                  getCartData();
+                },
+              ),
               Positioned(
                 bottom: 0,
                 left: 0,
