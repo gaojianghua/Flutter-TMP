@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:27
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-18 14:00:25
+ * @LastEditTime: 2023-12-05 13:40:55
  * @Description: file content
  */
 import 'dart:convert';
@@ -230,29 +230,24 @@ class _CartPageState extends State<CartPage> {
       child: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Expanded(
-                  child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '合计:',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(50.sp),
-                    color: Colors.black,
-                  ),
+              Text(
+                '合计:',
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(50.sp),
+                  color: Colors.black,
                 ),
-              )),
-              Expanded(
-                  child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '￥ ${state.allPrice}',
-                  style: TextStyle(
-                      fontSize: ScreenUtil().setSp(56.sp),
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold),
-                ),
-              ))
+                textAlign: TextAlign.right,
+              ),
+              Text(
+                '￥ ${state.allPrice}',
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(56.sp),
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.right,
+              ),
             ],
           ),
           Container(
