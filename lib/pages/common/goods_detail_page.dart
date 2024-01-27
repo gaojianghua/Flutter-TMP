@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-11 13:47:37
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-18 13:47:01
+ * @LastEditTime: 2024-01-27 17:44:07
  * @Description: file content
  */
 import 'dart:convert';
@@ -61,6 +61,14 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
     getGoodsDetail();
   }
 
+  late CartStore cartStore;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    cartStore = BlocProvider.of<CartStore>(context);
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -68,142 +76,126 @@ class _GoodsDetailPageState extends State<GoodsDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: [
-          BlocProvider<SystemStore>(create: (centext) => SystemStore()),
-          BlocProvider<CartStore>(create: (centext) => CartStore()),
-        ],
-        child: Scaffold(
-            appBar: AppBar(
-              title: const Text('商品详情'),
-              elevation: 0.0,
-            ),
-            body: Stack(children: [
-              Container(
-                  padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(80)),
-                  child: goodsDetail.goodInfo.image1.isNotEmpty
-                      ? ListView(children: [
-                          goodsIamge(goodsDetail.goodInfo.image1),
-                          goodsName(goodsDetail.goodInfo.goodsName),
-                          goodsSn(goodsDetail.goodInfo.goodsSerialNumber),
-                          goodsPrice(goodsDetail.goodInfo.presentPrice,
-                              goodsDetail.goodInfo.oriPrice),
-                          goodsBread(),
-                          Row(
-                            children: [
-                              goodsTabsLeft(),
-                              goodsTabsRight(),
-                            ],
-                          ),
-                          changeId == 1
-                              ? goodsHtml(goodsDetail.goodInfo.goodsDetail)
-                              : goodsComments()
-                        ])
-                      : Text('加载中')),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                child: SafeArea(
-                    bottom: true,
-                    child: Container(
-                        color: Colors.white,
-                        height: ScreenUtil().setHeight(80),
-                        width: ScreenUtil().setWidth(750),
-                        child: Row(children: [
-                          Stack(
-                            children: [
-                              BlocBuilder<CartStore, MyState>(
-                                  builder: (context, state) {
-                                return InkWell(
-                                  onTap: () {
-                                    context
-                                        .read<SystemStore>()
-                                        .setTabbarIndex(3);
-                                    Get.back();
-                                  },
-                                  child: Container(
-                                    width: ScreenUtil().setWidth(150),
-                                    alignment: Alignment.center,
-                                    child: Icon(
-                                      Icons.shopping_cart,
-                                      size: 35,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                );
-                              }),
-                              BlocBuilder<CartStore, MyState>(
-                                  builder: (context, state) {
-                                return Positioned(
-                                  top: 0,
-                                  right: 20,
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      border: Border.all(width: 2, color: Colors.white),
-                                      borderRadius: BorderRadius.all(Radius.circular(15))
-                                    ),
-                                    child: Text(
-                                      "${state.allCount}",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil().setSp(35.sp)
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              })
-                            ],
-                          ),
-                          BlocBuilder<CartStore, MyState>(
-                              builder: (context, state) {
-                            return InkWell(
-                              onTap: () {
-                                Datum goods = Datum(
-                                  goodsId: goodsDetail.goodInfo.goodsId,
-                                  goodsName: goodsDetail.goodInfo.goodsName,
-                                  count: 1,
-                                  price: goodsDetail.goodInfo.presentPrice,
-                                  images: goodsDetail.goodInfo.image1,
-                                  isChecked: true,
-                                );
-                                context.read<CartStore>().addGoods(goods);
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: ScreenUtil().setHeight(80),
-                                width: ScreenUtil().setWidth(300),
-                                color: Colors.green,
-                                child: Text(
-                                  '加入购物车',
-                                  style: TextStyle(
-                                      fontSize: ScreenUtil().setSp(50.sp),
-                                      color: Colors.white),
-                                ),
-                              ),
-                            );
-                          }),
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('商品详情'),
+          elevation: 0.0,
+        ),
+        body: Stack(children: [
+          Container(
+              padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(80)),
+              child: goodsDetail.goodInfo.image1.isNotEmpty
+                  ? ListView(children: [
+                      goodsIamge(goodsDetail.goodInfo.image1),
+                      goodsName(goodsDetail.goodInfo.goodsName),
+                      goodsSn(goodsDetail.goodInfo.goodsSerialNumber),
+                      goodsPrice(goodsDetail.goodInfo.presentPrice,
+                          goodsDetail.goodInfo.oriPrice),
+                      goodsBread(),
+                      Row(
+                        children: [
+                          goodsTabsLeft(),
+                          goodsTabsRight(),
+                        ],
+                      ),
+                      changeId == 1
+                          ? goodsHtml(goodsDetail.goodInfo.goodsDetail)
+                          : goodsComments()
+                    ])
+                  : Text('加载中')),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: SafeArea(
+                bottom: true,
+                child: Container(
+                    color: Colors.white,
+                    height: ScreenUtil().setHeight(80),
+                    width: ScreenUtil().setWidth(750),
+                    child: Row(children: [
+                      Stack(
+                        children: [
                           InkWell(
                             onTap: () {
-                              context.read<CartStore>().remove();
+                              context.read<SystemStore>().setTabbarIndex(3);
+                              Get.back();
                             },
                             child: Container(
+                              width: ScreenUtil().setWidth(150),
                               alignment: Alignment.center,
-                              height: ScreenUtil().setHeight(80),
-                              width: ScreenUtil().setWidth(300),
-                              color: Colors.red,
-                              child: Text(
-                                '立即购买',
-                                style: TextStyle(
-                                    fontSize: ScreenUtil().setSp(50.sp),
-                                    color: Colors.white),
+                              child: Icon(
+                                Icons.shopping_cart,
+                                size: 35,
+                                color: Colors.red,
                               ),
                             ),
                           ),
-                        ]))),
-              )
-            ])));
+                          Positioned(
+                            top: 0,
+                            right: 20,
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  border:
+                                      Border.all(width: 2, color: Colors.white),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              child: Text(
+                                "${cartStore.state.goodsNum}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(35.sp)),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Datum goods = Datum(
+                            goodsId: goodsDetail.goodInfo.goodsId,
+                            goodsName: goodsDetail.goodInfo.goodsName,
+                            count: 1,
+                            price: goodsDetail.goodInfo.presentPrice,
+                            images: goodsDetail.goodInfo.image1,
+                            isChecked: true,
+                          );
+                          context.read<CartStore>().addGoods(goods);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: ScreenUtil().setHeight(80),
+                          width: ScreenUtil().setWidth(300),
+                          color: Colors.green,
+                          child: Text(
+                            '加入购物车',
+                            style: TextStyle(
+                                fontSize: ScreenUtil().setSp(50.sp),
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          context.read<CartStore>().remove();
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: ScreenUtil().setHeight(80),
+                          width: ScreenUtil().setWidth(300),
+                          color: Colors.red,
+                          child: Text(
+                            '立即购买',
+                            style: TextStyle(
+                                fontSize: ScreenUtil().setSp(50.sp),
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ]))),
+          )
+        ]));
   }
 
   Widget goodsComments() {

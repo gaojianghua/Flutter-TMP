@@ -2,14 +2,13 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:03:34
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-18 11:58:10
+ * @LastEditTime: 2024-01-27 17:40:52
  * @Description: file content
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop/store/home_store.dart';
 import 'package:flutter_shop/store/system_store.dart';
-import '../../store/cart_store.dart';
 import '../../store/category_goods_list_store.dart';
 import '../../store/category_store.dart';
 import 'home_page.dart';
@@ -67,8 +66,7 @@ class _IndexPageState extends State<IndexPage> {
       BlocProvider(create: (_) => CategoryGoodsListStore()),
     ], child: CategoryPage()),
     MessagePage(),
-    BlocProvider<CartStore>(
-        create: (context) => CartStore(), child: CartPage()),
+    CartPage(),
     MyPage(),
   ];
 
