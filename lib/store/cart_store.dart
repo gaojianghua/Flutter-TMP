@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-12 15:48:27
  * @LastEditors: 高江华
- * @LastEditTime: 2024-01-28 15:33:54
+ * @LastEditTime: 2024-01-28 16:30:37
  * @Description: file content
  */
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,7 +56,7 @@ class CartStore extends Cubit<MyState> {
   void remove() {
     var ps = PersistentStorage();
     ps.remove('cartInfo');
-    updateCartList([], state.allPrice, state.allCount, state.allCheck, state.goodsNum);
+    updateCartList([], Decimal.parse('0.00'), 0, false, 0);
   }
 
   void getCartData(List<Datum> data) {
