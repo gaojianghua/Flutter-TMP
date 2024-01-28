@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-10-12 15:48:27
  * @LastEditors: 高江华
- * @LastEditTime: 2024-01-27 17:14:33
+ * @LastEditTime: 2024-01-28 15:33:54
  * @Description: file content
  */
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,7 +47,7 @@ class CartStore extends Cubit<MyState> {
     });
     if (!isHave) {
       state.cartList.add(goods);
-      print(state.cartList.toString());
+      state.allCheck = false;
     }
     
     updateCartList(state.cartList, state.allPrice, state.allCount, state.allCheck, state.goodsNum);

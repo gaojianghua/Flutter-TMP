@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:27
  * @LastEditors: 高江华
- * @LastEditTime: 2024-01-28 10:53:00
+ * @LastEditTime: 2024-01-28 14:26:41
  * @Description: file content
  */
 import 'dart:convert';
@@ -111,7 +111,7 @@ class _CartPageState extends State<CartPage> {
         value: item.isChecked,
         activeColor: Colors.red,
         onChanged: (bool) {
-          context.read().changeCheck(item, bool!);
+          context.read<CartStore>().changeCheck(item, bool!);
         },
       ),
     );
