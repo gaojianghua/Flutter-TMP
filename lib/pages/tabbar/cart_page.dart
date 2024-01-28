@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:27
  * @LastEditors: 高江华
- * @LastEditTime: 2024-01-27 18:00:10
+ * @LastEditTime: 2024-01-28 10:53:00
  * @Description: file content
  */
 import 'dart:convert';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../store/cart_store.dart';
+import 'package:flutter_shop/store/cart_store.dart';
 import '../../models/cart_model.dart';
 
 class CartPage extends StatefulWidget {
@@ -27,14 +27,6 @@ class _CartPageState extends State<CartPage> {
     super.initState();
   }
 
-  late CartStore cartStore;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    cartStore = BlocProvider.of<CartStore>(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,40 +34,56 @@ class _CartPageState extends State<CartPage> {
           elevation: 0.0,
           title: Text('购物车'),
         ),
-        body: Stack(
-          children: [
-            EasyRefresh(
-              child: Padding(
-                  padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(80)),
-                  child: CustomScrollView(
-                    slivers: <Widget>[
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) =>
-                              cartItem(index),
-                          childCount: cartStore.state.cartList.length,
-                        ),
-                      )
-                    ],
-                  )),
-              onRefresh: () async {
-                await Future.delayed(const Duration(seconds: 2));
-                if (!mounted) {
-                  return;
-                }
-                getCartData();
-              },
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              child: cartBottomSettlement(),
-            )
-          ],
-        ));
+        body: BlocBuilder<CartStore, MyState>(builder: (context, state) {
+          return Stack(
+            children: [
+              EasyRefresh(
+                child: Padding(
+                    padding:
+                        EdgeInsets.only(bottom: ScreenUtil().setHeight(80)),
+                    child: CustomScrollView(
+                      slivers: <Widget>[
+                        state.cartList.length > 0
+                            ? SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                  (context, index) =>
+                                      cartItem(state.cartList[index], state),
+                                  childCount: state.cartList.length,
+                                ),
+                              )
+                            : SliverToBoxAdapter(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.only(top: 200),
+                                  child: Text(
+                                    '购物车为空',
+                                    style: TextStyle(
+                                        fontSize: ScreenUtil().setSp(45.sp),
+                                        color: Colors.black87),
+                                  ),
+                                ),
+                              )
+                      ],
+                    )),
+                onRefresh: () async {
+                  await Future.delayed(const Duration(seconds: 2));
+                  if (!mounted) {
+                    return;
+                  }
+                  getCartData();
+                },
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                child: cartBottomSettlement(state),
+              )
+            ],
+          );
+        }));
   }
 
-  Widget cartItem(i) {
+  Widget cartItem(Datum item, MyState state) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 2, 5, 2),
       padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
@@ -85,31 +93,31 @@ class _CartPageState extends State<CartPage> {
       ),
       child: Row(
         children: [
-          cartItemCheck(i),
-          cartItemImage(i),
-          cartItemTitle(i),
-          cartItemPrice(i)
+          cartItemCheck(context, item),
+          cartItemImage(item),
+          cartItemTitle(item, state),
+          cartItemPrice(item, state)
         ],
       ),
     );
   }
 
-  Widget cartItemCheck(i) {
+  Widget cartItemCheck(BuildContext c, Datum item) {
     return Container(
       child: Checkbox(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        value: cartStore.state.cartList[i].isChecked,
+        value: item.isChecked,
         activeColor: Colors.red,
         onChanged: (bool) {
-          cartStore.changeCheck(cartStore.state.cartList[i], bool!);
+          context.read().changeCheck(item, bool!);
         },
       ),
     );
   }
 
-  Widget cartItemImage(i) {
+  Widget cartItemImage(Datum item) {
     return Container(
       width: ScreenUtil().setWidth(150),
       padding: EdgeInsets.all(3),
@@ -117,13 +125,13 @@ class _CartPageState extends State<CartPage> {
         border: Border.all(width: 1, color: Colors.black12),
       ),
       child: Image.network(
-        cartStore.state.cartList[i].images,
+        item.images,
         fit: BoxFit.cover,
       ),
     );
   }
 
-  Widget cartItemTitle(i) {
+  Widget cartItemTitle(Datum item, MyState state) {
     return Container(
       width: ScreenUtil().setWidth(300),
       height: ScreenUtil().setWidth(150),
@@ -134,15 +142,15 @@ class _CartPageState extends State<CartPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            cartStore.state.cartList[i].goodsName,
+            item.goodsName,
           ),
-          stepper(i)
+          stepper(item)
         ],
       ),
     );
   }
 
-  Widget cartItemPrice(i) {
+  Widget cartItemPrice(Datum item, MyState state) {
     return Container(
       width: ScreenUtil().setWidth(150),
       height: ScreenUtil().setWidth(150),
@@ -152,7 +160,7 @@ class _CartPageState extends State<CartPage> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            '¥${cartStore.state.cartList[i].price}',
+            '¥${item.price}',
             style: TextStyle(
                 fontSize: ScreenUtil().setSp(52.sp),
                 color: Colors.red,
@@ -161,7 +169,7 @@ class _CartPageState extends State<CartPage> {
           Container(
             child: InkWell(
               onTap: () {
-                cartStore.deleteGoods(cartStore.state.cartList[i].goodsId);
+                context.read<CartStore>().deleteGoods(item.goodsId);
               },
               child: Icon(
                 Icons.delete_forever,
@@ -175,17 +183,21 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget cartBottomSettlement() {
+  Widget cartBottomSettlement(MyState state) {
     return Container(
       padding: EdgeInsets.all(5),
       color: Colors.white,
       child: Row(
-        children: [selectAllBtn(), allPriceArea(), settlementBtn()],
+        children: [
+          selectAllBtn(state),
+          allPriceArea(state),
+          settlementBtn(state)
+        ],
       ),
     );
   }
 
-  Widget selectAllBtn() {
+  Widget selectAllBtn(MyState state) {
     return Container(
       child: Row(
         children: [
@@ -193,15 +205,15 @@ class _CartPageState extends State<CartPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(50),
             ),
-            value: cartStore.state.allCheck,
+            value: state.allCheck,
             activeColor: Colors.red,
             onChanged: (bool) {
-              cartStore.changeAllCheck(bool!);
+              context.read<CartStore>().changeAllCheck(bool!);
             },
           ),
           InkWell(
             onTap: () {
-              cartStore.changeAllCheck(!cartStore.state.allCheck);
+              context.read<CartStore>().changeAllCheck(!state.allCheck);
             },
             child: Text('全选',
                 style: TextStyle(
@@ -212,7 +224,7 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget allPriceArea() {
+  Widget allPriceArea(MyState state) {
     return Container(
       width: ScreenUtil().setWidth(400),
       child: Column(
@@ -229,7 +241,7 @@ class _CartPageState extends State<CartPage> {
                 textAlign: TextAlign.right,
               ),
               Text(
-                '￥ ${cartStore.state.allPrice}',
+                '￥ ${state.allPrice}',
                 style: TextStyle(
                     fontSize: ScreenUtil().setSp(56.sp),
                     color: Colors.red,
@@ -253,7 +265,7 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget settlementBtn() {
+  Widget settlementBtn(MyState state) {
     return Container(
       width: ScreenUtil().setWidth(180),
       padding: EdgeInsets.only(left: 10),
@@ -268,7 +280,7 @@ class _CartPageState extends State<CartPage> {
             borderRadius: BorderRadius.circular(3),
           ),
           child: Text(
-            '结算(${cartStore.state.allCount})',
+            '结算(${state.allCount})',
             style: TextStyle(
               color: Colors.white,
             ),
@@ -278,7 +290,7 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget stepper(i) {
+  Widget stepper(Datum item) {
     return Container(
         width: ScreenUtil().setWidth(175),
         margin: EdgeInsets.only(top: 5),
@@ -287,17 +299,17 @@ class _CartPageState extends State<CartPage> {
         ),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          stepperBtn(1, i),
-          stepperCount(i),
-          stepperBtn(2, i),
+          stepperBtn(1, item),
+          stepperCount(item),
+          stepperBtn(2, item),
         ]));
   }
 
-  Widget stepperBtn(int isBtn, i) {
+  Widget stepperBtn(int isBtn, Datum item) {
     return InkWell(
       onTap: () {
-        if (cartStore.state.cartList[i].count <= 1 && isBtn == 1) return;
-        cartStore.changeCount(cartStore.state.cartList[i], isBtn == 1 ? false : true);
+        if (item.count <= 1 && isBtn == 1) return;
+        context.read<CartStore>().changeCount(item, isBtn == 1 ? false : true);
       },
       child: Container(
         width: ScreenUtil().setWidth(50),
@@ -314,14 +326,14 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget stepperCount(i) {
+  Widget stepperCount(Datum item) {
     return Container(
       width: ScreenUtil().setWidth(70),
       height: ScreenUtil().setHeight(40),
       alignment: Alignment.center,
       color: Colors.white,
       child: Text(
-        '${cartStore.state.cartList[i].count}',
+        '${item.count}',
       ),
     );
   }
@@ -335,6 +347,6 @@ class _CartPageState extends State<CartPage> {
       print('JSON decode error: $e');
     }
     CartModel cartData = CartModel.fromJson(jsonMap);
-    cartStore.getCartData(cartData.data);
+    context.read<CartStore>().getCartData(cartData.data);
   }
 }
