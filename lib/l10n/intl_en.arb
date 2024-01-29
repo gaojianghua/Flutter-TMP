@@ -1,0 +1,28 @@
+{
+    "title": "Gongyue Mall",
+    "hotTitle": "Hot zone",
+    "hotProduct": "Hot product",
+
+
+    "home": "Home",
+    "about": "About",
+    "greet": "Hi, {name}",
+    "askChoice": "There are two choices:{one}? or {two}",
+    "@askChoice": {
+        "description": "Give someone two choice and wait for selection",
+        "placeHolder": {
+            "one": {},
+            "two": {}
+        }
+    },
+    "customDateFormat": "current date: {date}",
+    "@customDateFormat": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "EEE, MM/dd/yyyy",
+                "isCustomDateFormat": "true"
+            }
+        }
+    }
+}

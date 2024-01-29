@@ -2,15 +2,18 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-18 11:32:26
+ * @LastEditTime: 2024-01-29 17:47:32
  * @Description: file content
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/generated/l10n.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_shop/main.dart';
+import 'package:flutter_shop/store/system_store.dart';
 import '../../models/home_model.dart';
 import '../../pages/common/goods_detail_page.dart';
 import '../../store/home_store.dart';
@@ -52,8 +55,30 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final systemStore = BlocProvider.of<SystemStore>(context);
     return Scaffold(
-        appBar: AppBar(elevation: 0, title: Text('首页')),
+        appBar: AppBar(
+          elevation: 0,
+          title: Text('首页'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.language),
+              onPressed: () {
+                // 切换到英文
+                systemStore.setLanguage(Locale('en'));
+                runApp(MyApp());
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.language),
+              onPressed: () {
+                // 切换到中文
+                systemStore.setLanguage(Locale('zh'));
+              },
+            ),
+            // 添加更多的自定义按钮
+          ],
+        ),
         body: BlocBuilder<HomeStore, HomeData>(builder: (context, state) {
           return EasyRefresh(
             // controller: homeController,
@@ -122,7 +147,7 @@ class _HomePageState extends State<HomePage>
     margin: EdgeInsets.only(top: 10, bottom: 10),
     alignment: Alignment.center,
     color: Colors.transparent,
-    child: Text('火爆专区'),
+    child: Text(S.current.hotTitle),
   );
 
   Widget wrapList() {

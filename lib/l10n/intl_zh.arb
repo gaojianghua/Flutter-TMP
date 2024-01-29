@@ -1,0 +1,28 @@
+{
+    "title": "宫悦商城",
+    "hotTitle": "火爆专区",
+    "hotProduct": "热门商品",
+
+
+    "home": "首页",
+    "about": "关于",
+    "greet": "你好, {name}",
+    "askChoice": "这里有两个选择:{one}?或是 {two}",
+    "@askChoice": {
+        "description": "给某人两个选择，然后等待他的选择",
+        "placeHolder": {
+            "one": {},
+            "two": {}
+        }
+    },
+    "customDateFormat": "当前日期: {date}",
+    "@customDateFormat": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "EEE, MM/dd/yyyy",
+                "isCustomDateFormat": "true"
+            }
+        }
+    }
+}
