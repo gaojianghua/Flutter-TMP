@@ -6,6 +6,7 @@
  * @Description: file content
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/generated/l10n.dart';
 
 class MessagePage extends StatelessWidget {
   const MessagePage({super.key});
@@ -14,7 +15,7 @@ class MessagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('消息'),
+        title: Text(S.current.message),
         elevation: 0.0,
       ),
       body: Container(),

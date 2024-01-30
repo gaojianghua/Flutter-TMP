@@ -6,6 +6,7 @@
  * @Description: file content
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/generated/l10n.dart';
 
 
 class MyPage extends StatefulWidget {
@@ -21,7 +22,7 @@ class _MyPageState extends State<MyPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text('个人中心'),
+        title: Text(S.current.my),
       ),
       body: Container(),
     );

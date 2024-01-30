@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2024-01-29 17:47:32
+ * @LastEditTime: 2024-01-30 10:19:34
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -12,7 +12,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_shop/main.dart';
 import 'package:flutter_shop/store/system_store.dart';
 import '../../models/home_model.dart';
 import '../../pages/common/goods_detail_page.dart';
@@ -55,92 +54,94 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final systemStore = BlocProvider.of<SystemStore>(context);
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: Text('首页'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.language),
-              onPressed: () {
-                // 切换到英文
-                systemStore.setLanguage(Locale('en'));
-                runApp(MyApp());
+    return BlocBuilder<SystemStore, SystemState>(builder: (context, state) {
+      return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text('首页'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.language),
+                onPressed: () {
+                  // 切换到英文
+                  context.read<SystemStore>().setLanguage(Locale('en'));
+                  S.load(Locale('en', 'US'));
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.language),
+                onPressed: () {
+                  // 切换到中文
+                  context.read<SystemStore>().setLanguage(Locale('zh'));
+                  S.load(Locale('zh'));
+                },
+              ),
+              // 添加更多的自定义按钮
+            ],
+          ),
+          body: BlocBuilder<HomeStore, HomeData>(builder: (context, state) {
+            return EasyRefresh(
+              // controller: homeController,
+              child: state.slides.length > 0
+                  ? CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: EasyRefresh(
+                            child: SwiperDiy(swiperList: state.slides),
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: MenuDiy(menuList: state.menus),
+                        ),
+                        SliverToBoxAdapter(
+                          child: LeaderPhone(
+                            leaderImage: state.shopInfo.leaderImage,
+                            leaderPhone: state.shopInfo.leaderPhone,
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: RecommendedGoods(goodsList: state.goodsList),
+                        ),
+                        SliverToBoxAdapter(
+                          child: FloorContent(
+                            floorGoodsList: state.floorGoodsListOne,
+                            floorGoodsTitle: state.floorGoodsTitleOne,
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: FloorContent(
+                            floorGoodsList: state.floorGoodsListTwo,
+                            floorGoodsTitle: state.floorGoodsTitleTwo,
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: hotGoods(),
+                        ),
+                      ],
+                    )
+                  : Text('加载中'),
+              onRefresh: () async {
+                await Future.delayed(const Duration(seconds: 2));
+                if (!mounted) {
+                  return;
+                }
+                getHomePageContent();
+                homeController.finishRefresh();
+                homeController.resetFooter();
               },
-            ),
-            IconButton(
-              icon: Icon(Icons.language),
-              onPressed: () {
-                // 切换到中文
-                systemStore.setLanguage(Locale('zh'));
+              onLoad: () async {
+                await Future.delayed(const Duration(seconds: 2));
+                if (!mounted) {
+                  return;
+                }
+                getHomePageContent('S');
+                homeController.finishLoad(flowGoodsList.length >= 20
+                    ? IndicatorResult.noMore
+                    : IndicatorResult.success);
               },
-            ),
-            // 添加更多的自定义按钮
-          ],
-        ),
-        body: BlocBuilder<HomeStore, HomeData>(builder: (context, state) {
-          return EasyRefresh(
-            // controller: homeController,
-            child: state.slides.length > 0
-                ? CustomScrollView(
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: EasyRefresh(
-                          child: SwiperDiy(swiperList: state.slides),
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: MenuDiy(menuList: state.menus),
-                      ),
-                      SliverToBoxAdapter(
-                        child: LeaderPhone(
-                          leaderImage: state.shopInfo.leaderImage,
-                          leaderPhone: state.shopInfo.leaderPhone,
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: RecommendedGoods(goodsList: state.goodsList),
-                      ),
-                      SliverToBoxAdapter(
-                        child: FloorContent(
-                          floorGoodsList: state.floorGoodsListOne,
-                          floorGoodsTitle: state.floorGoodsTitleOne,
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: FloorContent(
-                          floorGoodsList: state.floorGoodsListTwo,
-                          floorGoodsTitle: state.floorGoodsTitleTwo,
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: hotGoods(),
-                      ),
-                    ],
-                  )
-                : Text('加载中'),
-            onRefresh: () async {
-              await Future.delayed(const Duration(seconds: 2));
-              if (!mounted) {
-                return;
-              }
-              getHomePageContent();
-              homeController.finishRefresh();
-              homeController.resetFooter();
-            },
-            onLoad: () async {
-              await Future.delayed(const Duration(seconds: 2));
-              if (!mounted) {
-                return;
-              }
-              getHomePageContent('S');
-              homeController.finishLoad(flowGoodsList.length >= 20
-                  ? IndicatorResult.noMore
-                  : IndicatorResult.success);
-            },
-          );
-        }));
+            );
+          }));
+    });
   }
 
   Widget hotTitle = Container(
@@ -394,7 +395,7 @@ class RecommendedGoods extends StatelessWidget {
         border: Border(bottom: BorderSide(width: 1, color: Colors.black12)),
       ),
       child: Text(
-        '热门商品',
+        S.current.hotProduct,
         style: TextStyle(color: Colors.red),
       ),
     );

@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:31:00
  * @LastEditors: 高江华
- * @LastEditTime: 2023-10-16 17:43:50
+ * @LastEditTime: 2024-01-30 09:57:39
  * @Description: file content
  */
 import 'dart:convert';
@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter_shop/generated/l10n.dart';
 import 'package:flutter_shop/pages/common/goods_detail_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -37,7 +38,7 @@ class _CategoryPageState extends State<CategoryPage>
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('分类'),
+        title: Text(S.current.category),
       ),
       body: Row(
         children: [

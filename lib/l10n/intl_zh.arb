@@ -5,6 +5,10 @@
 
 
     "home": "首页",
+    "message": "消息",
+    "cart": "购物车",
+    "category": "分类",
+    "my": "我的",
     "about": "关于",
     "greet": "你好, {name}",
     "askChoice": "这里有两个选择:{one}?或是 {two}",

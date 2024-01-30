@@ -2,11 +2,12 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:03:34
  * @LastEditors: 高江华
- * @LastEditTime: 2024-01-27 17:40:52
+ * @LastEditTime: 2024-01-30 10:16:54
  * @Description: file content
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_shop/generated/l10n.dart';
 import 'package:flutter_shop/store/home_store.dart';
 import 'package:flutter_shop/store/system_store.dart';
 import '../../store/category_goods_list_store.dart';
@@ -25,28 +26,30 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage> {
-  final List<BottomNavigationBarItem> bottomTabs = [
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: '首页',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.search),
-      label: '分类',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.message),
-      label: '消息',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.shopping_cart),
-      label: '购物车',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.account_circle),
-      label: '我的',
-    ),
-  ];
+  List<BottomNavigationBarItem> bottomTabs() {
+    return [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        label: S.of(context).home,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.search),
+        label: S.of(context).category,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.message),
+        label: S.of(context).message,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.shopping_cart),
+        label: S.of(context).cart,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.account_circle),
+        label: S.of(context).my,
+      ),
+    ];
+  }
 
   int currentIndex = 0;
   // ignore: prefer_typing_uninitialized_variables
@@ -79,7 +82,7 @@ class _IndexPageState extends State<IndexPage> {
           backgroundColor: Color(0xffeeeeee),
           type: BottomNavigationBarType.fixed, //如果底部有4个或者4个以上的菜单的时候就需要配置这个参数
           currentIndex: state.tabbarIndex,
-          items: bottomTabs,
+          items: bottomTabs(),
           onTap: (index) {
             context.read<SystemStore>().setTabbarIndex(index);
           },

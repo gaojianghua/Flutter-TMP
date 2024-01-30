@@ -30,11 +30,15 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about": MessageLookupByLibrary.simpleMessage("About"),
         "askChoice": m0,
+        "cart": MessageLookupByLibrary.simpleMessage("Cart"),
+        "category": MessageLookupByLibrary.simpleMessage("Category"),
         "customDateFormat": m1,
         "greet": m2,
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "hotProduct": MessageLookupByLibrary.simpleMessage("Hot product"),
         "hotTitle": MessageLookupByLibrary.simpleMessage("Hot zone"),
+        "message": MessageLookupByLibrary.simpleMessage("Message"),
+        "my": MessageLookupByLibrary.simpleMessage("My"),
         "title": MessageLookupByLibrary.simpleMessage("Gongyue Mall")
       };
 }

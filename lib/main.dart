@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 10:53:47
  * @LastEditors: 高江华
- * @LastEditTime: 2024-01-29 17:58:05
+ * @LastEditTime: 2024-01-30 10:06:27
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -105,7 +105,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                     textTheme:
                         TextTheme(bodyMedium: TextStyle(fontSize: 28.sp)),
                   ),
-                  home: const IndexPage());
+                  home: IndexPage());
             });
           },
         ));

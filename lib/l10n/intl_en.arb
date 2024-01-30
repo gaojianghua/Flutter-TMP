@@ -5,6 +5,10 @@
 
 
     "home": "Home",
+    "message": "Message",
+    "cart": "Cart",
+    "category": "Category",
+    "my": "My",
     "about": "About",
     "greet": "Hi, {name}",
     "askChoice": "There are two choices:{one}? or {two}",
