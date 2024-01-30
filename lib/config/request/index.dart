@@ -2,16 +2,17 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-22 16:52:09
  * @LastEditors: 高江华
- * @LastEditTime: 2023-09-22 17:27:14
+ * @LastEditTime: 2024-01-30 14:42:19
  * @Description: file content
  */
 import 'package:dio/dio.dart';
+import 'package:flutter_shop/env/index.dart';
 
 class CustomDio {
   final Dio _dio = Dio();
 
   CustomDio() {
-    _dio.options.baseUrl = 'https://gaojianghua.cn:8888/api';
+    _dio.options.baseUrl = Env.envConfig.appDomain;
     _dio.interceptors.add(CustomInterceptors());
   }
 
