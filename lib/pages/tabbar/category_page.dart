@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter_shop/generated/l10n.dart';
-import 'package:flutter_shop/pages/common/goods_detail_page.dart';
+import 'package:flutter_shop/pages_offspring/goods_detail_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import '../../models/category_model.dart';

@@ -2,13 +2,13 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 10:53:47
  * @LastEditors: 高江华
- * @LastEditTime: 2024-01-30 10:06:27
+ * @LastEditTime: 2024-02-01 09:35:36
  * @Description: file content
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_shop/pages/common/not_found_page.dart';
+import 'package:flutter_shop/pages_offspring/not_found_page.dart';
 import 'generated/l10n.dart';
 import 'router/index.dart';
 import 'package:get/get.dart';

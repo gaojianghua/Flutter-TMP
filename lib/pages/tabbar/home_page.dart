@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 11:25:16
  * @LastEditors: 高江华
- * @LastEditTime: 2024-01-30 14:57:20
+ * @LastEditTime: 2024-02-01 09:35:24
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -14,13 +14,13 @@ import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/store/system_store.dart';
 import '../../models/home_model.dart';
-import '../../pages/common/goods_detail_page.dart';
+import '../../pages_offspring/goods_detail_page.dart';
 import '../../store/home_store.dart';
 import 'package:get/get.dart';
 import '../../main_models/launcher/index.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
-import '../home/news_page.dart';
+import '../../pages_next/home/news_page.dart';
 
 class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();

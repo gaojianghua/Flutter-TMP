@@ -67,13 +67,13 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - images/banner.jpeg
-    - data/home.json
-    - data/category.json
-    - data/goods.json
-    - data/goods1.json
-    - data/goods_detail.json
-    - data/cart.json
+    - lib/assets/images/bg.jpg
+    - lib/data/home.json
+    - lib/data/category.json
+    - lib/data/goods.json
+    - lib/data/goods1.json
+    - lib/data/goods_detail.json
+    - lib/data/cart.json
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
