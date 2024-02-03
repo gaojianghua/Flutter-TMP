@@ -8,10 +8,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop/generated/l10n.dart';
-import 'package:flutter_shop/store/home_store.dart';
-import 'package:flutter_shop/store/system_store.dart';
-import '../../store/category_goods_list_store.dart';
-import '../../store/category_store.dart';
+import 'package:flutter_shop/bloc/home_store.dart';
+import 'package:flutter_shop/bloc/system_store.dart';
+import '../../bloc/category_goods_list_store.dart';
+import '../../bloc/category_store.dart';
 import 'home_page.dart';
 import 'category_page.dart';
 import 'my_page.dart';

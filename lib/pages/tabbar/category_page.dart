@@ -16,9 +16,9 @@ import 'package:flutter_shop/pages_offspring/goods_detail_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import '../../models/category_model.dart';
-import '../../store/category_store.dart';
+import '../../bloc/category_store.dart';
 import '../../models/category_goods_list.dart';
-import '../../store/category_goods_list_store.dart';
+import '../../bloc/category_goods_list_store.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({super.key});

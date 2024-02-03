@@ -12,12 +12,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/models/goods_detail_model.dart';
-import 'package:flutter_shop/store/cart_store.dart';
+import 'package:flutter_shop/bloc/cart_store.dart';
 import 'package:get/get.dart';
 import '../../models/cart_model.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-import '../../store/system_store.dart';
+import '../bloc/system_store.dart';
 
 class GoodsDetailPage extends StatefulWidget {
   final String? goodsId;

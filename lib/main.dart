@@ -2,7 +2,7 @@
  * @Author: 高江华 g598670138@163.com
  * @Date: 2023-09-21 10:53:47
  * @LastEditors: 高江华
- * @LastEditTime: 2024-02-01 09:35:36
+ * @LastEditTime: 2024-02-03 15:40:27
  * @Description: file content
  */
 import 'package:flutter/material.dart';
@@ -14,8 +14,8 @@ import 'router/index.dart';
 import 'package:get/get.dart';
 import 'config/request/index.dart';
 import 'pages/tabbar/index_page.dart';
-import 'store/cart_store.dart';
-import 'store/system_store.dart';
+import 'bloc/cart_store.dart';
+import 'bloc/system_store.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 

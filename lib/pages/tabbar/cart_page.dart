@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_shop/generated/l10n.dart';
-import 'package:flutter_shop/store/cart_store.dart';
+import 'package:flutter_shop/bloc/cart_store.dart';
 import '../../models/cart_model.dart';
 
 class CartPage extends StatefulWidget {
