@@ -6,7 +6,7 @@
  * @Description: file content
  */
 import 'package:dio/dio.dart';
-import 'package:flutter_shop/env/index.dart';
+import 'package:flutter_tmp/env/index.dart';
 
 class CustomDio {
   final Dio _dio = Dio();

@@ -6,7 +6,7 @@
  * @Description: file content
  */
 import 'package:dio/dio.dart';
-import 'package:flutter_shop/config/request/index.dart';
+import 'package:flutter_tmp/config/request/index.dart';
 
 class SystemApi {
   final CustomDio _dio = CustomDio();
